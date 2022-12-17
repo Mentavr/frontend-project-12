@@ -1,2 +1,3 @@
 ### Hexlet tests and linter status:
-[![Actions Status](https://github.com/Mentavr/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/Mentavr/frontend-project-12/actions)
+[![Actions Status](https://github.com/Mentavr/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/Mentavr/frontend-project-12/actions)\
+http://0.0.0.0:7867
