@@ -1,46 +1,79 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "bootstrap/dist/css/bootstrap.min.css";
-import img from "./image/projectMen.jpeg"
+import img from "./image/projectMen.jpeg";
 import routes from "./routes";
-import axios from 'axios';
-import useAuth from './hooks/useAuth.jsx';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { logIn, logOut } from './slice/authLogger';
 
 
 const FormAtorithation = () => {
-  const auth = useAuth();
-  const loginPathApi = routes.userLogin()
+  const dispatch = useDispatch();
+  const inputRef = useRef(null);
+  const loginPathApi = routes.userLogin();
+  const navigate = useNavigate();
+  const [isError, setError] = useState(false);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  const SignupSchema = Yup.object({
+    username: Yup.string()
+    .min(1, 'Too Short!')
+    .required("Required"),
+    password: Yup.string()
+    .min(1, 'Too Short')
+    .required("Required"),
+  });
+
+  const validation = (errors) =>  {
+    console.log(errors)
+    errors.username || errors.password ? setError(true) : setError(false);
+  }
+  
+
+
+  const isValid = (error) => {
+    if(error) {
+      return 'form-control is-invalid'
+    }
+    return 'form-control';
+  }
+  
+
 
   const formik = useFormik({
     initialValues: {
-      login: "",
+      username: "",
       password: "",
     },
-    // validationSchema: Yup.object({
-    //   login: Yup.string()
-    //     .max(15, "Must be 15 characters or less")
-    //     .required("Required"),
-    //   passwod: Yup.string().required("Required"),
-    // }),
+    validationSchema: SignupSchema,
     onSubmit: async () => {
-      try{
-        console.log(loginPathApi)
+      try {
         const login = await axios.post(loginPathApi, formik.values);
-        window.localStorage.getItem('userId', login.token);
-        auth.logIn();
-      }catch (error) {
-        auth.logOut();
+        localStorage.setItem("userId", JSON.stringify(login.data));
+        dispatch(logIn());
+        navigate("/");
+      } catch (error) {
+        setError(true);
+        dispatch(logOut());
       }
     },
-  });
+  })
+
   return (
     <div className="h-100">
       <div className="h-100">
         <div className="d-flex flex-column h-100">
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
-              <a className="navbar-brand" href="/">Hexlet Chat</a>
+              <a className="navbar-brand" href="/">
+                Hexlet Chat
+              </a>
             </div>
           </nav>
           <div className="container-fluid h-100">
@@ -49,41 +82,45 @@ const FormAtorithation = () => {
                 <div className="card shadow-sm">
                   <div className="card-body row p-5">
                     <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                      <img className="rounded-circle" src={img} alt=""/>
+                      <img className="rounded-circle" src={img} alt="" />
                     </div>
+                    
                     <form
                       onSubmit={formik.handleSubmit}
                       className="col-12 col-md-6 mt-3 mt-mb-0"
                     >
                       <h1 className="text-center mb-4">Войти</h1>
-                      <div className="form-floating mb-3">
-                      <label htmlFor="login">Ваш ник</label>
+                      <div className="form-floating form-group  mb-3">
                         <input
-                          id="login"
-                          name="login"
+                          placeholder="Ваш ник"
+                          ref={inputRef}
+                          className={isValid(isError)}
+                          id="username"
+                          name="username"
                           type="text"
                           onChange={formik.handleChange}
-                          value={formik.values.login}
-                          className="form-control"
-                          autoComplete="login"
-                          required 
-                          autofocus
-                          placeholder="Ваш ник"
+                          value={formik.values.username}
+                          autoComplete="username"
+                          required
                         />
+                        <label htmlFor='username' for='username'>Ваш ник</label>
                       </div>
-                      <div className="form-floating mb-4">
-                      <label htmlFor="password">Пароль</label>
+                      <div className="form-floating mb-4 ">
                         <input
+                          placeholder="Пароль"
                           id="password"
                           name="password"
                           type="password"
                           onChange={formik.handleChange}
                           value={formik.values.password}
-                          className="form-control"
+                          className={isValid(isError)}
                           autoComplete="current-password"
                           required
-                          placeholder="Пароль"
                         />
+                          <label htmlFor='password' for='password'>Пароль</label>
+                          <div class="invalid-tooltip">
+                          Неверные имя пользователя или пароль
+                          </div>
                       </div>
                       <button
                         type="submit"
@@ -109,3 +146,34 @@ const FormAtorithation = () => {
   );
 };
 export default FormAtorithation;
+
+
+// const MyTextField = ({ label, ...props }) => {
+//   console.log('myText',label, props)
+//   const [meta, nameValue ] = useField(props);
+//   console.log(meta, nameValue)
+//   return (
+//     <>
+//         <input 
+//         placeholder={label}
+//         id={nameValue}
+//         name={nameValue}
+//         autoComplete={nameValue}
+//         {...props}/>
+//         <label for={label}>
+//         {label}
+//       </label>
+//       {meta.touched && meta.error ? (
+//         <div className="error">{meta.error}</div>
+//       ) : null}
+//     </>
+//   );
+// };
+// <MyTextField 
+// label={'Пароль'} 
+// className="form-control"
+// type="text" 
+// onChange={formik.handleChange}
+// value={formik.values.passwor}
+// required
+//  />

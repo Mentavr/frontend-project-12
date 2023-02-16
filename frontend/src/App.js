@@ -8,28 +8,30 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-import { useState } from 'react';
-import useAuth from './hooks/useAuth.jsx';
-import AutorProvide from './context/provider'
+import { store } from './slice/index'
+import { Provider } from 'react-redux'
+import { useSelector} from 'react-redux'
+
+
+
 
 
 
 const PrivateRoute = ({ children }) => {
-  const auth = useAuth();
-
+  const logger = useSelector((state) => state.logger.authLogger)
+  const location = useLocation();
 
   return (
-    auth.logger ? children : <Navigate to="/login" />
+    logger ? children : <Navigate to="/login" state={{ from: location }}/>
   );
 };
 
 
 function App() {
   return (
-    <AutorProvide >
+    <Provider store={store}>
       <Router>
         <Routes>
-          <Route path="/login" element={<FormAtorithation />} />
           <Route
             path="/"
             element={(
@@ -38,9 +40,15 @@ function App() {
               </PrivateRoute>
             )}
           />
+           <Route
+            path="/login"
+            element={(
+              <FormAtorithation />
+            )}
+            />
           </Routes>
       </Router>
-    </AutorProvide>
+    </Provider>
   );
 }
 

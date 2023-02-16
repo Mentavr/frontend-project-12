@@ -1,7 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useFormik } from "formik";
+import { useSelector, useDispatch } from 'react-redux'
+import { userData } from './slice/usersData'
+import { logOut } from './slice/authLogger'
+
 
 const Chat = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(userData());
+  },[])
+
+  const data = useSelector((state) => state.users.data)
+
+const exitHandler = () => {
+  dispatch(logOut())
+}
+
   const formik = useFormik({
     initialValues: {
       message: "",
@@ -11,8 +28,8 @@ const Chat = () => {
     },
   });
 
-  return (
-    <div className="h-100">
+    return (
+      <div className="h-100">
       <div className="h-100">
         <div className="d-flex flex-column h-100">
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
@@ -23,6 +40,7 @@ const Chat = () => {
               <button
                     type="button"
                     className="btn btn-primary"
+                    onClick={() => exitHandler()}
                   >Выйти</button>
             </div>
           </nav>
@@ -49,24 +67,19 @@ const Chat = () => {
                   </button>
                 </div>
                 <ul className="nav flex-column nav-pills nav-fill px-2">
-                  <li className="nav-item w-100">
-                    <button
-                      type="button"
-                      className="w-100 rounded-0 text-start btn btn-secondary"
-                    >
-                        <span className="me-1">#</span> 
-                        general
-                    </button>
-                  </li>
-                  <li className="nav-item w-100">
-                    <button
-                      type="button"
-                      className="w-100 rounded-0 text-start btn btn-secondary"
-                    >
-                        <span className="me-1">#</span> 
-                        random
-                    </button>
-                  </li>
+                {data.channels.map((elem) => ( 
+                    <li key={elem.id} className="nav-item w-100">
+                       <button
+                         type="button"
+                         className="w-100 rounded-0 text-start btn btn-secondary"
+                       >
+                           <span className="me-1">#</span> 
+                           {elem.name}
+                       </button>
+                     </li>
+                     )
+                    )
+                    } 
                 </ul>
               </div>
               <div className="col p-0 h-100">
@@ -80,14 +93,19 @@ const Chat = () => {
                   <div
                     id="messages-box"
                     className="chat-messages overflow-auto px-5"
-                  ></div>
+                  >
+                      {data.messages.map((message) => (
+                        <div class="text-break mb-2">
+                          <b>ник</b>: {message}
+                        </div>
+                      ))}
+                  </div>
                   <div className="mt-auto px-5 py-3">
                     <form
                       onSubmit={formik.handleSubmit}
                       className="py-1 border rounded-2"
                     >
                     <div className="input-group has-validation">
-                      <label htmlFor="userName">Ваш ник</label>
                         <input
                             className="border-0 p-0 ps-2 form-control"
                           ariaLabel="Новое сообщение"
@@ -108,6 +126,6 @@ const Chat = () => {
         </div>
       </div>
     </div>
-  );
+    )
 };
 export default Chat;
