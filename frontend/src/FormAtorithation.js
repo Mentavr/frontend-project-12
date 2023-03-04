@@ -103,7 +103,7 @@ const FormAtorithation = () => {
                           autoComplete="username"
                           required
                         />
-                        <label htmlFor='username' for='username'>Ваш ник</label>
+                        <label htmlFor='username'>Ваш ник</label>
                       </div>
                       <div className="form-floating mb-4 ">
                         <input
@@ -117,8 +117,8 @@ const FormAtorithation = () => {
                           autoComplete="current-password"
                           required
                         />
-                          <label htmlFor='password' for='password'>Пароль</label>
-                          <div class="invalid-tooltip">
+                          <label htmlFor='password'>Пароль</label>
+                          <div className="invalid-tooltip">
                           Неверные имя пользователя или пароль
                           </div>
                       </div>
@@ -146,34 +146,3 @@ const FormAtorithation = () => {
   );
 };
 export default FormAtorithation;
-
-
-// const MyTextField = ({ label, ...props }) => {
-//   console.log('myText',label, props)
-//   const [meta, nameValue ] = useField(props);
-//   console.log(meta, nameValue)
-//   return (
-//     <>
-//         <input 
-//         placeholder={label}
-//         id={nameValue}
-//         name={nameValue}
-//         autoComplete={nameValue}
-//         {...props}/>
-//         <label for={label}>
-//         {label}
-//       </label>
-//       {meta.touched && meta.error ? (
-//         <div className="error">{meta.error}</div>
-//       ) : null}
-//     </>
-//   );
-// };
-// <MyTextField 
-// label={'Пароль'} 
-// className="form-control"
-// type="text" 
-// onChange={formik.handleChange}
-// value={formik.values.passwor}
-// required
-//  />

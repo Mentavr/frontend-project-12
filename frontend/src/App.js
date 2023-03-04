@@ -17,9 +17,11 @@ import { useSelector} from 'react-redux'
 
 
 
+
 const PrivateRoute = ({ children }) => {
   const logger = useSelector((state) => state.logger.authLogger)
   const location = useLocation();
+
 
   return (
     logger ? children : <Navigate to="/login" state={{ from: location }}/>

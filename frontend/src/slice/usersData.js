@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import routes from '../routes.js';
 import axios from '../axiosClient.js';
+import _ from 'lodash'
 
 
 export const userData = createAsyncThunk(
@@ -11,12 +12,24 @@ export const userData = createAsyncThunk(
       }
 )
 
-const initialState = { loadingStatus: 'idle', error: null, data: { channels: [], messages: [], currentChannelId: '' } }
+const initialState = { loadingStatus: 'idle', error: null, data: { channels: [], messages: [], currentChannelId: 1 } }
 const userSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
+        addChannel: (state, action) => {
+          state.data.channels.push(action.payload)
+          console.log(state)
+        },
+        removeChannel: (state, action) => {
+          debugger
+          const newChannel = state.data.channels.filter((channel) => channel.id !== action.payload.id)
+          const newData = {...state['data'], channels: newChannel}
+          state = {...state, data: newData}
+        },
+        addMessage:(state, action) => {
 
+        }
     },
   extraReducers: (builder) => {
     builder
@@ -36,6 +49,6 @@ const userSlice = createSlice({
   },
 })
 
-
+export const {addChannel, removeChannel} = userSlice.actions;
 
 export default userSlice.reducer;
