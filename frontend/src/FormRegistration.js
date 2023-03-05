@@ -1,21 +1,21 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import "bootstrap/dist/css/bootstrap.min.css";
-import img from "./image/projectMen.jpeg";
 import routes from "./routes";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { logIn, logOut } from './slice/authLogger';
+import img from './image/avatarRegistration.jpg'
 
 
-const FormAtorithation = () => {
+
+const FormRegistration = () => {
   const [isError, setError] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef(null);
-  const loginPathApi = routes.userLogin();
+  const createUserPathApi = routes.createUser();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -30,11 +30,6 @@ const FormAtorithation = () => {
     .required("Required"),
   });
 
-  // const validation = (errors) =>  {
-  //   console.log(errors)
-  //   errors.username || errors.password ? setError(true) : setError(false);
-  // }
-  
 
 
   const isValid = (error) => {
@@ -54,7 +49,7 @@ const FormAtorithation = () => {
     validationSchema: SignupSchema,
     onSubmit: async () => {
       try {
-        const login = await axios.post(loginPathApi, formik.values);
+        const login = await axios.post(createUserPathApi, formik.values);
         localStorage.setItem("userId", JSON.stringify(login.data));
         dispatch(logIn());
         navigate("/");
@@ -145,4 +140,4 @@ const FormAtorithation = () => {
     </div>
   );
 };
-export default FormAtorithation;
+export default FormRegistration;

@@ -5,8 +5,6 @@ import socket from "./socket";
 
 const RemoveChannel = ({show,  handleClose, data}) => {
 
-  console.log(data)
-
   const handalRemove = (number) => {
     if(data.removable) {
       socket.emit('removeChannel', { id: number });

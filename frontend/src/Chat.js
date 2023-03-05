@@ -3,7 +3,13 @@ import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { userData } from "./slice/usersData";
 import { logOut } from "./slice/authLogger";
-import { addChannel, removeChannel } from "./slice/usersData";
+import {
+  addChannel,
+  removeChannel,
+  addMessage,
+  renameChannel,
+  setChannel,
+} from "./slice/usersData";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
@@ -16,6 +22,7 @@ const Chat = () => {
   const [showRemove, setShowRemove] = useState(false);
   const [showNewChannel, setShowNewChannel] = useState(false);
   const [showRename, setShowRename] = useState(false);
+  const [countMessage, setCountMessage] = useState(0);
 
   const handleCloseRemove = () => setShowRemove(false);
   const handleShowRemove = () => setShowRemove(true);
@@ -27,30 +34,43 @@ const Chat = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    socket.on('removeChannel', (payload) => {
-      dispatch(removeChannel(payload))
+    socket.on("removeChannel", (payload) => {
+      dispatch(removeChannel(payload));
     });
     socket.on("newChannel", (payload) => {
       dispatch(addChannel(payload));
     });
-    dispatch(userData()); 
+    socket.on("newMessage", (payload) => {
+      dispatch(addMessage(payload));
+    });
+    socket.on('renameChannel', (payload) => {
+      dispatch(renameChannel(payload));
+    });
+    dispatch(userData());
   }, []);
 
-  const userName = JSON.parse(localStorage.userId).username
+  const userName = JSON.parse(localStorage.userId).username;
   const data = useSelector((state) => state.users.data);
-
-  console.log(data)
+  const {currentChannelId} = useSelector((state) => state.users.data);
+  console.log(data);
   const exitHandler = () => {
     dispatch(logOut());
+  };
+
+  const chooseChannelHandler = (e) => {
+    dispatch(setChannel(Number(e.target.id)));
   };
 
   const formik = useFormik({
     initialValues: {
       message: "",
     },
-    onSubmit: (values) => {
-
-      socket.emit('newMessage', { body: {values}, channelId: data.currentChannelId, username: userName});
+    onSubmit: ({ message }) => {
+      socket.emit("newMessage", {
+        body: message,
+        channelId: currentChannelId,
+        username: userName,
+      });
     },
   });
 
@@ -102,6 +122,11 @@ const Chat = () => {
                   </div>
                   <ul className="nav flex-column nav-pills nav-fill px-2">
                     {data.channels.map((elem) => {
+                      const { currentChannelId } = data;
+                      const activeButton =
+                        elem.id === currentChannelId
+                          ? "btn-secondary"
+                          : "btn-light";
                       return (
                         <li key={elem.id} className="nav-item w-100">
                           <Dropdown
@@ -110,7 +135,9 @@ const Chat = () => {
                           >
                             <Button
                               type="button"
-                              className="w-100 rounded-0 text-start btn btn-secondary"
+                              className={`w-100 rounded-0 text-start btn ${activeButton}`}
+                              id={elem.id}
+                              onClick={chooseChannelHandler}
                             >
                               <span className="me-1">#</span>
                               {elem.name}
@@ -121,7 +148,7 @@ const Chat = () => {
                             ></Dropdown.Toggle>
                             <Dropdown.Menu>
                               <Dropdown.Item
-                                href="#/1"
+                                href="#"
                                 onClick={handleShowRemove}
                               >
                                 Удалить
@@ -132,15 +159,16 @@ const Chat = () => {
                                 data={elem}
                               />
                               <Dropdown.Item
-                                href="#/2"
+                                href="#"
                                 onClick={handleShowRename}
                               >
                                 Переименовать
                               </Dropdown.Item>
                               <RenameModal
-                                  show={showRename}
-                                  handleClose={handleCloseRename}
-                                />
+                                show={showRename}
+                                handleClose={handleCloseRename}
+                                idChannel={elem.id}
+                              />
                             </Dropdown.Menu>
                           </Dropdown>
                         </li>
@@ -154,17 +182,22 @@ const Chat = () => {
                       <p className="m-0">
                         <b># general</b>
                       </p>
-                      <span className="text-muted">0 сообщений</span>
+                      <span className="text-muted">
+                        {countMessage} сообщений
+                      </span>
                     </div>
                     <div
                       id="messages-box"
                       className="chat-messages overflow-auto px-5"
                     >
-                      {data.messages.map((message) => (
+                      {data.messages.filter((message) => message.channelId === currentChannelId)
+                      .map((message) => {
+                      return(
                         <div className="text-break mb-2">
-                          <b>ник</b>: {message}
+                          <b>{message.username}</b>: {message.body}
                         </div>
-                      ))}
+                      )
+                      })}
                     </div>
                     <div className="mt-auto px-5 py-3">
                       <form
@@ -175,8 +208,8 @@ const Chat = () => {
                           <input
                             className="border-0 p-0 ps-2 form-control"
                             aria-label="Новое сообщение"
-                            id="body"
-                            name="body"
+                            id="message"
+                            name="message"
                             type="text"
                             onChange={formik.handleChange}
                             value={formik.values.message}
