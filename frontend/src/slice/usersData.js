@@ -24,8 +24,10 @@ const userSlice = createSlice({
       const filterChannels = state.data.channels.filter(
         (channel) => channel.id !== payload.id
       );
-
-      return { ...state, data: { ...state.data, channels: filterChannels } };
+       const filterMessage = state.data.messages.filter(
+        (messeg) => messeg.channelId !== payload.id
+       )
+      return { ...state, data: { ...state.data, channels: filterChannels, messages: filterMessage } };
     },
     addMessage: (state, { payload }) => {
       state.data.messages.push(payload);
@@ -34,7 +36,6 @@ const userSlice = createSlice({
       const removeChannels = state.data.channels.map((channel) =>
         channel.id !== payload.id ? channel : payload
       );
-      console.log(removeChannels);
       return { ...state, data: { ...state.data, channels: removeChannels } };
     },
     setChannel: (state, { payload }) => {

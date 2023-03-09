@@ -10,40 +10,34 @@ import {
   renameChannel,
   setChannel,
 } from "./slice/usersData";
-import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ModalChannel from "./NewChannelModal.js";
-import RemoveModal from "./RemoveModal";
-import RenameModal from "./RenameModal";
+import DropdownMenu from "./DropdownMenu";
 import socket from "./socket";
 
 const Chat = () => {
-  const [showRemove, setShowRemove] = useState(false);
   const [showNewChannel, setShowNewChannel] = useState(false);
-  const [showRename, setShowRename] = useState(false);
   const [countMessage, setCountMessage] = useState(0);
+  const [newChannelError, setNewChannelError] = useState(false);
 
-  const handleCloseRemove = () => setShowRemove(false);
-  const handleShowRemove = () => setShowRemove(true);
   const handleCloseNewChannel = () => setShowNewChannel(false);
   const handleShowNewChannel = () => setShowNewChannel(true);
-  const handleCloseRename = () => setShowRename(false);
-  const handleShowRename = () => setShowRename(true);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     socket.on("removeChannel", (payload) => {
       dispatch(removeChannel(payload));
+      console.log(data.currentChannelId === payload.id);
     });
     socket.on("newChannel", (payload) => {
       dispatch(addChannel(payload));
+      dispatch(setChannel(payload.id));
     });
     socket.on("newMessage", (payload) => {
       dispatch(addMessage(payload));
     });
-    socket.on('renameChannel', (payload) => {
+    socket.on("renameChannel", (payload) => {
       dispatch(renameChannel(payload));
     });
     dispatch(userData());
@@ -51,13 +45,11 @@ const Chat = () => {
 
   const userName = JSON.parse(localStorage.userId).username;
   const data = useSelector((state) => state.users.data);
-  const {currentChannelId} = useSelector((state) => state.users.data);
-  console.log(data);
+  const { currentChannelId } = useSelector((state) => state.users.data);
   const exitHandler = () => {
     dispatch(logOut());
   };
-
-  const chooseChannelHandler = (e) => {
+  const choseChannelHandler = (e) => {
     dispatch(setChannel(Number(e.target.id)));
   };
 
@@ -118,59 +110,39 @@ const Chat = () => {
                     <ModalChannel
                       show={showNewChannel}
                       handleClose={handleCloseNewChannel}
+                      newChannelError={newChannelError}
+                      setNewChannelError={setNewChannelError}
                     />
                   </div>
                   <ul className="nav flex-column nav-pills nav-fill px-2">
                     {data.channels.map((elem) => {
-                      const { currentChannelId } = data;
                       const activeButton =
                         elem.id === currentChannelId
                           ? "btn-secondary"
                           : "btn-light";
+                      if (elem.removable) {
+                        return (
+                          <li key={elem.id} className="nav-item w-100">
+                            <DropdownMenu
+                              activeButton={activeButton}
+                              elem={elem}
+                              choseChannelHandler={choseChannelHandler}
+                              currentChannelId={currentChannelId}
+                            />
+                          </li>
+                        );
+                      }
                       return (
                         <li key={elem.id} className="nav-item w-100">
-                          <Dropdown
-                            as={ButtonGroup}
-                            className="d-flex dropdown btn-group"
+                          <Button
+                            type="button"
+                            className={`w-100 rounded-0 text-start btn ${activeButton}`}
+                            id={elem.id}
+                            onClick={choseChannelHandler}
                           >
-                            <Button
-                              type="button"
-                              className={`w-100 rounded-0 text-start btn ${activeButton}`}
-                              id={elem.id}
-                              onClick={chooseChannelHandler}
-                            >
-                              <span className="me-1">#</span>
-                              {elem.name}
-                            </Button>
-                            <Dropdown.Toggle
-                              variant="first"
-                              id="dropdown-basic"
-                            ></Dropdown.Toggle>
-                            <Dropdown.Menu>
-                              <Dropdown.Item
-                                href="#"
-                                onClick={handleShowRemove}
-                              >
-                                Удалить
-                              </Dropdown.Item>
-                              <RemoveModal
-                                show={showRemove}
-                                handleClose={handleCloseRemove}
-                                data={elem}
-                              />
-                              <Dropdown.Item
-                                href="#"
-                                onClick={handleShowRename}
-                              >
-                                Переименовать
-                              </Dropdown.Item>
-                              <RenameModal
-                                show={showRename}
-                                handleClose={handleCloseRename}
-                                idChannel={elem.id}
-                              />
-                            </Dropdown.Menu>
-                          </Dropdown>
+                            <span className="me-1">#</span>
+                            {elem.name}
+                          </Button>
                         </li>
                       );
                     })}
@@ -190,14 +162,17 @@ const Chat = () => {
                       id="messages-box"
                       className="chat-messages overflow-auto px-5"
                     >
-                      {data.messages.filter((message) => message.channelId === currentChannelId)
-                      .map((message) => {
-                      return(
-                        <div className="text-break mb-2">
-                          <b>{message.username}</b>: {message.body}
-                        </div>
-                      )
-                      })}
+                      {data.messages
+                        .filter(
+                          (message) => message.channelId === currentChannelId
+                        )
+                        .map((message) => {
+                          return (
+                            <div className="text-break mb-2">
+                              <b>{message.username}</b>: {message.body}
+                            </div>
+                          );
+                        })}
                     </div>
                     <div className="mt-auto px-5 py-3">
                       <form

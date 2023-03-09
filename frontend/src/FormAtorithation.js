@@ -11,7 +11,7 @@ import { logIn, logOut } from './slice/authLogger';
 
 
 const FormAtorithation = () => {
-  const [isError, setError] = useState(false);
+  const [isErrorAutorithation, setErrorAutorithation] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef(null);
@@ -45,7 +45,7 @@ const FormAtorithation = () => {
   }
   
 
-
+  const classAutorithation = isValid(isErrorAutorithation)
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -58,8 +58,8 @@ const FormAtorithation = () => {
         localStorage.setItem("userId", JSON.stringify(login.data));
         dispatch(logIn());
         navigate("/");
-      } catch (error) {
-        setError(true);
+      } catch (error){
+        setErrorAutorithation(true);
         dispatch(logOut());
       }
     },
@@ -94,7 +94,7 @@ const FormAtorithation = () => {
                         <input
                           placeholder="Ваш ник"
                           ref={inputRef}
-                          className={isValid(isError)}
+                          className={classAutorithation}
                           id="username"
                           name="username"
                           type="text"
@@ -113,7 +113,7 @@ const FormAtorithation = () => {
                           type="password"
                           onChange={formik.handleChange}
                           value={formik.values.password}
-                          className={isValid(isError)}
+                          className={classAutorithation}
                           autoComplete="current-password"
                           required
                         />

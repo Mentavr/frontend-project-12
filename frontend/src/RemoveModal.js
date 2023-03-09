@@ -1,24 +1,31 @@
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import socket from "./socket";
+import { useDispatch, useSelector } from "react-redux";
+import { setChannel } from "./slice/usersData";
 
-const RemoveChannel = ({show,  handleClose, data}) => {
 
-  const handalRemove = (number) => {
-    if(data.removable) {
-      socket.emit('removeChannel', { id: number });
-      handleClose();
-    }
+const RemoveChannel = ({show,  handleClose, id }) => {
+  const {currentChannelId} = useSelector((state) => state.users.data)
+  const dispatch = useDispatch()
+
+  const handalRemove = (idNumber) => {
+    socket.emit('removeChannel', { id: idNumber });
+    currentChannelId === idNumber
+    ? dispatch(setChannel(1))
+    : dispatch(setChannel(currentChannelId))
+    console.log(currentChannelId, idNumber)
     handleClose();
   }
   return (
     <>
       <Modal
         show={show}
+        autoFocus
         onHide={handleClose}
         backdrop="static"
-        keyboard={false}
+        keyboard={true}
         centered
         restoreFocus="true"
       >
@@ -35,7 +42,7 @@ const RemoveChannel = ({show,  handleClose, data}) => {
             >
               Отменить
             </Button>
-            <Button type="submit" variant="primery" className="btn btn-primary" onClick={() => handalRemove(data.id)}>
+            <Button type="submit" variant="red" className="btn btn-primary" onClick={() => handalRemove(id)}>
             Удалить
             </Button>
           </div>
