@@ -11,6 +11,7 @@ const loggerSlice = createSlice({
     },
     logOut: (state) => {
       state.authLogger = false;
+      localStorage.removeItem("userId")
     },
   },
 })

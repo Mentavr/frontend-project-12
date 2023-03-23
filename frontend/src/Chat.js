@@ -41,6 +41,9 @@ const Chat = () => {
       dispatch(renameChannel(payload));
     });
     dispatch(userData());
+    return () => {
+      socket.removeAllListeners()
+    }
   }, []);
 
   const userName = JSON.parse(localStorage.userId).username;
@@ -52,7 +55,7 @@ const Chat = () => {
   const choseChannelHandler = (e) => {
     dispatch(setChannel(Number(e.target.id)));
   };
-
+  
   const formik = useFormik({
     initialValues: {
       message: "",

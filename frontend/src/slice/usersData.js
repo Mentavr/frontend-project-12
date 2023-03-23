@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import routes from "../routes.js";
-import axios from "../axiosClient.js";
-import _ from "lodash";
+import axios from "axios";
 
 export const userData = createAsyncThunk("users/usersData", async () => {
-  const response = await axios.get(routes.dataUser());
-  return response.data;
+  const userId = JSON.parse(localStorage.getItem('userId'));
+  const dataPath = routes.dataUser();
+  const {data} = await axios.get(dataPath, {
+    headers: {
+      Authorization: `Bearer ${userId.token}`,
+    },
+  });
+  return data;
 });
 
 const initialState = {

@@ -132,8 +132,8 @@ const FormAtorithation = () => {
                   </div>
                   <div className="card-footer p-4">
                     <div className="text-center">
-                      <span>Нет аккаунта?</span>
-                      <a href="#">Регестрация</a>
+                      <span>Нет аккаунта? </span>
+                      <a href="/signup">Регестрация</a>
                     </div>
                   </div>
                 </div>
