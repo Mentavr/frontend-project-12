@@ -4,9 +4,11 @@ import Modal from "react-bootstrap/Modal";
 import socket from "./socket";
 import { useDispatch, useSelector } from "react-redux";
 import { setChannel } from "./slice/usersData";
+import { useTranslation } from "react-i18next";
 
 
 const RemoveChannel = ({show,  handleClose, id }) => {
+  const { t } = useTranslation()
   const {currentChannelId} = useSelector((state) => state.users.data)
   const dispatch = useDispatch()
 
@@ -15,7 +17,6 @@ const RemoveChannel = ({show,  handleClose, id }) => {
     currentChannelId === idNumber
     ? dispatch(setChannel(1))
     : dispatch(setChannel(currentChannelId))
-    console.log(currentChannelId, idNumber)
     handleClose();
   }
   return (
@@ -30,20 +31,20 @@ const RemoveChannel = ({show,  handleClose, id }) => {
         restoreFocus="true"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Удалить канал</Modal.Title>
+          <Modal.Title>{t("text.deleteChanel")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p className="lead">Уверены?</p>
+          <p className="lead">{t("text.confirm")}</p>
           <div className="d-flex justify-content-end">
             <Button
               variant="secondary"
               onClick={handleClose}
-              className="me-2 btn btn-secondary"
+              className="me-2"
             >
-              Отменить
+              {t("text.cancel")}
             </Button>
-            <Button type="submit" variant="red" className="btn btn-primary" onClick={() => handalRemove(id)}>
-            Удалить
+            <Button type="submit" variant="danger" onClick={() => handalRemove(id)}>
+            {t("text.delete")}
             </Button>
           </div>
         </Modal.Body>

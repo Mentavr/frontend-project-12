@@ -8,22 +8,23 @@ import Col from "react-bootstrap/Col";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const ModalChannel = ({
   show,
   handleClose,
-  newChannelError,
-  setNewChannelError,
 }) => {
   const namesChannels = useSelector((state) =>
     state.users.data.channels.map((channel) => channel.name)
   );
 
+  const { t } = useTranslation()
   const SignupSchema = Yup.object({
     newChannel: Yup.string()
-      .min(3, "Too Short!")
-      .notOneOf(namesChannels)
-      .required("Required"),
+      .min(3, t("errors.longText"))
+      .max(20, t("errors.longText"))
+      .notOneOf(namesChannels, t("errors.existChanel"))
+      .required(t("errors.required")),
   });
   const formik = useFormik({
     initialValues: {
@@ -31,17 +32,12 @@ const ModalChannel = ({
     },
     validationSchema: SignupSchema,
     onSubmit: () => {
-      socket.emit("newChannel", { name: formik.values.newChannel });
+      socket.emit("newChannel", { name: values.newChannel });
       handleClose();
-      setNewChannelError(false)
     },
   });
-  const { handleSubmit, handleChange, errors, values } = formik;
+  const { handleSubmit, handleChange, errors, values, handleBlur, touched } = formik;
 
-  const handleOnClick = (error) => {
-    const { newChannel } = error;
-    newChannel ? setNewChannelError(true) : handleClose();
-  };
   return (
     <>
       <Modal
@@ -53,14 +49,14 @@ const ModalChannel = ({
         restoreFocus="true"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Добавить канал</Modal.Title>
+          <Modal.Title>{t("text.addChanel")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Form.Group as={Col} htmlFor="validationFormikNewChannel">
               <InputGroup>
                 <Form.Label className="visually-hidden" htmlFor="newChannel">
-                  Имя канала
+                  {t("text.nameChanel")}
                 </Form.Label>
                 <Form.Control
                   autoFocus
@@ -71,29 +67,27 @@ const ModalChannel = ({
                   autoComplete="newChannel"
                   onChange={handleChange}
                   value={values.newChannel}
-                  isInvalid={newChannelError}
+                  isInvalid={touched.newChannel && errors.newChannel}
+                  onBlur={handleBlur}
                   required
                 />
                 <Form.Control.Feedback type="invalid">
-                  должно быть уникальным
+                  {errors.newChannel}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
               <Button
-                variant="secondary"
-                onClick={handleClose}
-                className="me-2 btn btn-secondary"
+                type="submit"
+                className="me-2 btn-secondary"
               >
-                Отменить
+                {t("text.cancel")}
               </Button>
               <Button
                 type="submit"
-                variant="primery"
-                className="btn btn-primary"
-                onClick={() => handleOnClick(errors)}
+                className="btn-primary"
               >
-                Отправить
+                {t("text.sendForm")}
               </Button>
             </Form.Group>
           </Form>

@@ -1,17 +1,24 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import "bootstrap/dist/css/bootstrap.min.css";
-import img from "./image/projectMen.jpeg";
-import routes from "./routes";
-import axios from "axios";
+import React, { useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { logIn, logOut } from './slice/authLogger';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import img from "./image/projectMen.jpeg";
+import routes from "./routes";
+import axios from "axios";
+
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import Button from "react-bootstrap/Button";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+
 
 
 const FormAtorithation = () => {
-  const [isErrorAutorithation, setErrorAutorithation] = useState(false);
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef(null);
@@ -23,29 +30,12 @@ const FormAtorithation = () => {
 
   const SignupSchema = Yup.object({
     username: Yup.string()
-    .min(1, 'Too Short!')
-    .required("Required"),
+    .required(t("errors.required")),
     password: Yup.string()
-    .min(1, 'Too Short')
-    .required("Required"),
+    .required(t("errors.required")),
   });
 
-  // const validation = (errors) =>  {
-  //   console.log(errors)
-  //   errors.username || errors.password ? setError(true) : setError(false);
-  // }
-  
 
-
-  const isValid = (error) => {
-    if(error) {
-      return 'form-control is-invalid'
-    }
-    return 'form-control';
-  }
-  
-
-  const classAutorithation = isValid(isErrorAutorithation)
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -59,11 +49,13 @@ const FormAtorithation = () => {
         dispatch(logIn());
         navigate("/");
       } catch (error){
-        setErrorAutorithation(true);
+        errors.password = t("errors.enterNickPassword")
         dispatch(logOut());
       }
     },
   })
+  const { errors, touched, values, handleChange, handleBlur, handleSubmit } =
+  formik;
 
   return (
     <div className="h-100">
@@ -72,7 +64,7 @@ const FormAtorithation = () => {
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
               <a className="navbar-brand" href="/">
-                Hexlet Chat
+                {t("text.hexletHeader")}
               </a>
             </div>
           </nav>
@@ -85,55 +77,79 @@ const FormAtorithation = () => {
                       <img className="rounded-circle" src={img} alt="" />
                     </div>
                     
-                    <form
-                      onSubmit={formik.handleSubmit}
+                    <Form
+                      onSubmit={handleSubmit}
                       className="col-12 col-md-6 mt-3 mt-mb-0"
                     >
-                      <h1 className="text-center mb-4">Войти</h1>
-                      <div className="form-floating form-group  mb-3">
-                        <input
-                          placeholder="Ваш ник"
-                          ref={inputRef}
-                          className={classAutorithation}
-                          id="username"
-                          name="username"
-                          type="text"
-                          onChange={formik.handleChange}
-                          value={formik.values.username}
-                          autoComplete="username"
-                          required
-                        />
-                        <label htmlFor='username'>Ваш ник</label>
-                      </div>
-                      <div className="form-floating mb-4 ">
-                        <input
-                          placeholder="Пароль"
-                          id="password"
-                          name="password"
-                          type="password"
-                          onChange={formik.handleChange}
-                          value={formik.values.password}
-                          className={classAutorithation}
-                          autoComplete="current-password"
-                          required
-                        />
-                          <label htmlFor='password'>Пароль</label>
-                          <div className="invalid-tooltip">
-                          Неверные имя пользователя или пароль
-                          </div>
-                      </div>
-                      <button
+                      <h1 className="text-center mb-4">{t("text.enter")}</h1>
+                       <Form.Group className="mb-3">
+                       <InputGroup hasValidation>
+                       <Form.Label
+                            htmlFor="username"
+                            className="visually-hidden"
+                          >
+                            {t("text.userName")}
+                          </Form.Label>
+                          <FloatingLabel label="Ваш ник">
+                            <Form.Control
+                            autoFocus={true}
+                              placeholder="Ваш ник"
+                              ref={inputRef}
+                              id="username"
+                              name="username"
+                              type="text"
+                              onChange={handleChange}
+                              value={values.username}
+                              onBlur={handleBlur}
+                              autoComplete="username"
+                              isInvalid={touched.username && errors.username}
+                              required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              {errors.username}
+                            </Form.Control.Feedback>
+                          </FloatingLabel>
+                        </InputGroup>
+                      </Form.Group>
+                      <Form.Group className="mb-4">
+                        <InputGroup hasValidation>
+                          <Form.Label
+                            htmlFor="password"
+                            className="visually-hidden"
+                          >
+                            {t("text.password")}
+                          </Form.Label>
+                          <FloatingLabel label="Пароль">
+                            <Form.Control
+                              placeholder="Пароль"
+                              id="password"
+                              name="password"
+                              type="password"
+                              onChange={handleChange}
+                              value={values.password}
+                              onBlur={handleBlur}
+                              autoComplete="current-password"
+                              isInvalid={touched.password && errors.password}
+                              required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              {errors.password}
+                            </Form.Control.Feedback>
+                          </FloatingLabel>
+                        </InputGroup>
+                      </Form.Group>
+                      <Button
                         type="submit"
-                        className="w-100 mb-3 btn btn-outline-primary"
+                        className="w-100 mb-3 "
                       >
-                        Войти
-                      </button>
-                    </form>
+                        {t("text.enter")}
+                      </Button>
+                    </Form>
                   </div>
                   <div className="card-footer p-4">
                     <div className="text-center">
-                      <span>Нет аккаунта? </span>
-                      <a href="/signup">Регестрация</a>
+                      <span>{t("text.noAccount")} </span>
+                      <a href="/signup">{t("text.registration")}</a>
                     </div>
                   </div>
                 </div>

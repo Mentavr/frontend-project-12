@@ -1,17 +1,37 @@
 import React from "react";
 import { useFormik } from "formik";
+import { useTranslation } from "react-i18next";
+import socket from "./socket";
+import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Col from "react-bootstrap/Col";
-import socket from "./socket";
+import { useSelector } from "react-redux";
+
 
 const RenameChannel = ({ show, handleClose, idChannel }) => {
+  const { t } = useTranslation()
+
+  const namesChannels = useSelector((state) =>
+  state.users.data.channels.map((channel) => channel.name)
+);
+
+
+  const SignupSchema = Yup.object({
+    renameChannel: Yup.string()
+      .min(3, t("errors.longText"))
+      .max(20, t("errors.longText"))
+      .notOneOf(namesChannels, t("errors.existChanel"))
+      .required(t("errors.required")),
+  });
+
   const formik = useFormik({
     initialValues: {
       renameChannel: "",
     },
+    validationSchema: SignupSchema,
     onSubmit: (value) => {
       socket.emit("renameChannel", {
         id: idChannel,
@@ -21,7 +41,7 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
     },
   });
 
-  const { handleSubmit, handleChange, errors, values } = formik;
+  const { handleSubmit, handleChange, handleBlur, errors, values, touched } = formik;
 
   return (
     <>
@@ -35,14 +55,14 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
         autoFocus
       >
         <Modal.Header closeButton>
-          <Modal.Title>Переименовать канал</Modal.Title>
+          <Modal.Title>{t("text.renameChannel")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group as={Col} htmlFor="validationFormikRenameChannel">
               <InputGroup>
                 <Form.Label className="visually-hidden" htmlFor="renameChannel">
-                  Имя канала
+                  {t("text.nameChanel")}
                 </Form.Label>
                 <Form.Control
                   className="mb-2"
@@ -52,12 +72,13 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
                   autoComplete="renameChannel"
                   onChange={handleChange}
                   value={values.renameChannel}
-                  // isInvalid={newChannelError}
+                  isInvalid={touched.renameChannel && errors.renameChannel}
+                  onBlur={handleBlur}
                   required
                 />
-                {/* <Form.Control.Feedback type="invalid">
-                  должно быть уникальным
-                </Form.Control.Feedback> */}
+                <Form.Control.Feedback type="invalid">
+                  {errors.renameChannel}
+                </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
@@ -66,15 +87,13 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
                 onClick={handleClose}
                 className="me-2 btn btn-secondary"
               >
-                Отменить
+                {t("text.cancel")}
               </Button>
               <Button
                 type="submit"
-                variant="primery"
-                className="btn btn-primary"
-                // onClick={() => handleOnClick(errors)}
+                variant="primary"
               >
-                Отправить
+                {t("text.sendForm")}
               </Button>
             </Form.Group>
           </Form>

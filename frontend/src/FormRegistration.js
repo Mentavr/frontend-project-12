@@ -1,11 +1,12 @@
-import React, { useRef, useEffect, useState, useContext } from "react";
+import React, { useRef, useEffect } from "react";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { logIn, logOut } from "./slice/authLogger";
 import * as Yup from "yup";
 import routes from "./routes";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logIn, logOut } from "./slice/authLogger";
 import img from "./image/avatarRegistration.jpg";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -13,13 +14,9 @@ import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Col from "react-bootstrap/Col";
 
-// import ValidationContext from "./context";
 
 const FormRegistration = () => {
-
-  // const validationContext = useContext(ValidationContext);
-  // const validationErrors = (errorName) => validationContext.t(errorName);
-  
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef(null);
@@ -31,16 +28,16 @@ const FormRegistration = () => {
 
   const SignupSchema = Yup.object({
     username: Yup.string()
-    .required("Обязательное поле")
-      .min(3, 'От 3 до 20 символов')
-      .max(20, "От 3 до 20 символов"),
+      .required(t("errors.required"))
+      .min(3, t("errors.longText"))
+      .max(20, t("errors.longText")),
     password: Yup.string()
-      .min(6, "Не менее 6 символов")
-      .required("Обязательное поле"),
+      .min(6, t("errors.tooShortPassword"))
+      .required(t("errors.required")),
     confirmPassword: Yup.string().when("password", (password, schema) => {
       return schema.test({
         test: (confirmPassword) => password === confirmPassword,
-        message: "Пароли должны совпадать",
+        message: t("errors.differentPassword"),
       });
     }),
   });
@@ -59,13 +56,13 @@ const FormRegistration = () => {
         dispatch(logIn());
         navigate("/");
       } catch (error) {
-        console.log(error);
-        formik.errors.confirmPassword = "такой пользовать ........"
+        errors.confirmPassword = t("errors.existUser");
         dispatch(logOut());
       }
     },
   });
-  const {errors, touched, values, handleChange, handleBlur, handleSubmit  } = formik;
+  const { errors, touched, values, handleChange, handleBlur, handleSubmit } =
+    formik;
 
   return (
     <div className="h-100">
@@ -74,7 +71,7 @@ const FormRegistration = () => {
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
               <a className="navbar-brand" href="/">
-                Hexlet Chat
+                {t("text.hexletHeader")}
               </a>
             </div>
           </nav>
@@ -86,19 +83,20 @@ const FormRegistration = () => {
                     <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
                       <img className="rounded-circle" src={img} alt="" />
                     </div>
-                    <Form 
-                      // noValidate
+                    <Form
                       onSubmit={handleSubmit}
                       className="col-12 col-md-6 mt-3 mt-mb-0"
                     >
-                      <h1 className="text-center mb-4">Регистрация</h1>
+                      <h1 className="text-center mb-4">
+                        {t("text.registration")}
+                      </h1>
                       <Form.Group className="mb-3">
                         <InputGroup hasValidation>
                           <Form.Label
                             htmlFor="username"
                             className="visually-hidden"
                           >
-                            Ваш ник
+                            {t("text.userName")}
                           </Form.Label>
                           <FloatingLabel label="Ваш ник">
                             <Form.Control
@@ -114,9 +112,9 @@ const FormRegistration = () => {
                               isInvalid={touched.username && errors.username}
                               required
                             />
-                              <Form.Control.Feedback type="invalid">
-                                {errors.username}
-                              </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">
+                              {errors.username}
+                            </Form.Control.Feedback>
                           </FloatingLabel>
                         </InputGroup>
                       </Form.Group>
@@ -126,7 +124,7 @@ const FormRegistration = () => {
                             htmlFor="password"
                             className="visually-hidden"
                           >
-                            Пароль
+                            {t("text.password")}
                           </Form.Label>
                           <FloatingLabel label="Пароль">
                             <Form.Control
@@ -153,7 +151,7 @@ const FormRegistration = () => {
                             htmlFor="password"
                             className="visually-hidden"
                           >
-                            Подтвердить пароль
+                            {t("text.confirmPassword")}
                           </Form.Label>
                           <FloatingLabel label="Подтвердить пароль">
                             <Form.Control
@@ -165,7 +163,10 @@ const FormRegistration = () => {
                               value={values.confirmPassword}
                               onBlur={handleBlur}
                               autoComplete="current-password"
-                              isInvalid={touched.confirmPassword && errors.confirmPassword}
+                              isInvalid={
+                                touched.confirmPassword &&
+                                errors.confirmPassword
+                              }
                               required
                             />
                             <Form.Control.Feedback type="invalid">
@@ -174,11 +175,8 @@ const FormRegistration = () => {
                           </FloatingLabel>
                         </InputGroup>
                       </Form.Group>
-                      <Button
-                        type="submit"
-                        className="w-100 mb-3"
-                      >
-                        Зарегестрироваться
+                      <Button type="submit" className="w-100 mb-3">
+                        {t("text.register")}
                       </Button>
                     </Form>
                   </div>

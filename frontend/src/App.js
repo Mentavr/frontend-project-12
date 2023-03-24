@@ -1,6 +1,5 @@
 import FormAtorithation from "./FormAtorithation.js";
 import FormRegistration from "./FormRegistration.js";
-import { useEffect } from "react";
 import Chat from "./Chat.js";
 import ErrorPage from "./ErrorPage.js";
 import {
@@ -13,9 +12,8 @@ import {
 import { store } from "./slice/index";
 import { Provider } from "react-redux";
 import { useSelector } from "react-redux";
-import ValidationContext from "./context/index.js";
-import i18next from "i18next";
-import interfaceTranslations from "./translation.js";
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 
 const PrivateRoute = ({ children }) => {
 
@@ -31,10 +29,8 @@ const PrivateRoute = ({ children }) => {
 };
 
 const App = () => {
-  const translation = i18next.createInstance();
-  translation.init(interfaceTranslations);
   return (
-    <ValidationContext.Provider value={translation}>
+   <I18nextProvider i18n={i18n}>
     <Provider store={store}>
       <Router>
         <Routes>
@@ -51,7 +47,7 @@ const App = () => {
         </Routes>
       </Router>
     </Provider>
-    </ValidationContext.Provider>
+    </I18nextProvider>
   );
 };
 

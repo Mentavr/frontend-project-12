@@ -4,9 +4,11 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import RemoveModal from "./RemoveModal";
 import RenameModal from "./RenameModal";
+import { useTranslation } from "react-i18next";
 
 
 const DropdownMenu = (props) => {
+  const { t } = useTranslation()
   const { activeButton, elem, choseChannelHandler} = props;
   const [showRemove, setShowRemove] = useState(false);
   const [showRename, setShowRename] = useState(false);
@@ -34,7 +36,7 @@ const DropdownMenu = (props) => {
       ></Dropdown.Toggle>
       <Dropdown.Menu>
         <Dropdown.Item href="#" onClick={handleShowRemove}>
-          Удалить
+          {t("text.remove")}
         </Dropdown.Item>
         <RemoveModal
           show={showRemove}
@@ -42,7 +44,7 @@ const DropdownMenu = (props) => {
           id={elem.id}
         />
         <Dropdown.Item href="#" onClick={handleShowRename}>
-          Переименовать
+          {t("text.rename")}
         </Dropdown.Item>
         <RenameModal
           show={showRename}
