@@ -3,12 +3,12 @@ import socket from "./socket";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import Col from "react-bootstrap/Col";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 
 const ModalChannel = ({
   show,
@@ -33,6 +33,7 @@ const ModalChannel = ({
     validationSchema: SignupSchema,
     onSubmit: () => {
       socket.emit("newChannel", { name: values.newChannel });
+      toast.success(t("text.createChanalSuccess"))
       handleClose();
     },
   });
@@ -54,7 +55,6 @@ const ModalChannel = ({
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group as={Col} htmlFor="validationFormikNewChannel">
-              <InputGroup>
                 <Form.Label className="visually-hidden" htmlFor="newChannel">
                   {t("text.nameChanel")}
                 </Form.Label>
@@ -74,7 +74,6 @@ const ModalChannel = ({
                 <Form.Control.Feedback type="invalid">
                   {errors.newChannel}
                 </Form.Control.Feedback>
-              </InputGroup>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
               <Button

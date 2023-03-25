@@ -6,9 +6,9 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import Col from "react-bootstrap/Col";
 import { useSelector } from "react-redux";
+import { toast } from 'react-toastify';
 
 
 const RenameChannel = ({ show, handleClose, idChannel }) => {
@@ -37,6 +37,7 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
         id: idChannel,
         name: value.renameChannel,
       });
+      toast.success(t("text.renameChanalSuccess"))
       handleClose();
     },
   });
@@ -60,7 +61,6 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
         <Modal.Body>
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group as={Col} htmlFor="validationFormikRenameChannel">
-              <InputGroup>
                 <Form.Label className="visually-hidden" htmlFor="renameChannel">
                   {t("text.nameChanel")}
                 </Form.Label>
@@ -79,7 +79,6 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
                 <Form.Control.Feedback type="invalid">
                   {errors.renameChannel}
                 </Form.Control.Feedback>
-              </InputGroup>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
               <Button

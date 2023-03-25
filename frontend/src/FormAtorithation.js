@@ -11,11 +11,10 @@ import routes from "./routes";
 import axios from "axios";
 
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
+
 import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-
-
+import { toast } from 'react-toastify';
 
 const FormAtorithation = () => {
   const { t } = useTranslation();
@@ -48,8 +47,18 @@ const FormAtorithation = () => {
         localStorage.setItem("userId", JSON.stringify(login.data));
         dispatch(logIn());
         navigate("/");
-      } catch (error){
-        errors.password = t("errors.enterNickPassword")
+      } catch ({request}){
+        const numberError = request.status
+        switch(numberError) {
+          case 401 :
+            errors.password = t("errors.enterNickPassword")
+          break
+          case 0 :
+            toast.error(t("errors.errorConnect"))
+          break
+          default:
+          new Error('что-то пошло не так')
+        }
         dispatch(logOut());
       }
     },
@@ -82,8 +91,8 @@ const FormAtorithation = () => {
                       className="col-12 col-md-6 mt-3 mt-mb-0"
                     >
                       <h1 className="text-center mb-4">{t("text.enter")}</h1>
-                       <Form.Group className="mb-3">
-                       <InputGroup hasValidation>
+                       <Form.Group>
+                  
                        <Form.Label
                             htmlFor="username"
                             className="visually-hidden"
@@ -92,7 +101,7 @@ const FormAtorithation = () => {
                           </Form.Label>
                           <FloatingLabel label="Ваш ник">
                             <Form.Control
-                            autoFocus={true}
+                              className="mb-3"
                               placeholder="Ваш ник"
                               ref={inputRef}
                               id="username"
@@ -105,14 +114,13 @@ const FormAtorithation = () => {
                               isInvalid={touched.username && errors.username}
                               required
                             />
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Control.Feedback type="invalid" tooltip>
                               {errors.username}
                             </Form.Control.Feedback>
                           </FloatingLabel>
-                        </InputGroup>
+           
                       </Form.Group>
                       <Form.Group className="mb-4">
-                        <InputGroup hasValidation>
                           <Form.Label
                             htmlFor="password"
                             className="visually-hidden"
@@ -132,11 +140,10 @@ const FormAtorithation = () => {
                               isInvalid={touched.password && errors.password}
                               required
                             />
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Control.Feedback type="invalid" tooltip>
                               {errors.password}
                             </Form.Control.Feedback>
                           </FloatingLabel>
-                        </InputGroup>
                       </Form.Group>
                       <Button
                         type="submit"

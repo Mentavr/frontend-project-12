@@ -5,6 +5,7 @@ import socket from "./socket";
 import { useDispatch, useSelector } from "react-redux";
 import { setChannel } from "./slice/usersData";
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 
 
 const RemoveChannel = ({show,  handleClose, id }) => {
@@ -16,7 +17,8 @@ const RemoveChannel = ({show,  handleClose, id }) => {
     socket.emit('removeChannel', { id: idNumber });
     currentChannelId === idNumber
     ? dispatch(setChannel(1))
-    : dispatch(setChannel(currentChannelId))
+    : dispatch(setChannel(currentChannelId));
+    toast.success(t("text.removeChanalSuccess"))
     handleClose();
   }
   return (

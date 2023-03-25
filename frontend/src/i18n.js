@@ -35,6 +35,9 @@ i18n
               deleteChanel: "Удалить канал",
               delete: "Удалить",
               renameChannel: "Переименовать канал",
+              createChanalSuccess: "Канал создан", 
+              removeChanalSuccess: "Канал удален",
+              renameChanalSuccess: "Канал переименован",
             },
               errors: {
                 passwordNotMatch: "Пароли должны совпадать",
@@ -44,7 +47,8 @@ i18n
                 differentPassword: "Пароли должны совпадать",
                 existUser: "Такой пользователь уже существует",
                 enterNickPassword: "Неверные имя пользователя или пароль",
-                existChanel: "Должно быть уникальным"
+                existChanel: "Должно быть уникальным",
+                errorConnect: "Ошибка соединения"
               },
           },
         },

@@ -9,7 +9,6 @@ import routes from "./routes";
 import axios from "axios";
 import img from "./image/avatarRegistration.jpg";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Col from "react-bootstrap/Col";
@@ -65,8 +64,6 @@ const FormRegistration = () => {
     formik;
 
   return (
-    <div className="h-100">
-      <div className="h-100">
         <div className="d-flex flex-column h-100">
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
@@ -79,19 +76,19 @@ const FormRegistration = () => {
             <div className="row justify-content-center align-content-center h-100">
               <div className="col-12 col-md-8 col-xxl-6">
                 <div className="card shadow-sm">
-                  <div className="card-body row p-5">
-                    <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                  <div className="card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
+                    <div>
                       <img className="rounded-circle" src={img} alt="" />
                     </div>
                     <Form
                       onSubmit={handleSubmit}
-                      className="col-12 col-md-6 mt-3 mt-mb-0"
+                      className="w-50"
                     >
                       <h1 className="text-center mb-4">
                         {t("text.registration")}
                       </h1>
                       <Form.Group className="mb-3">
-                        <InputGroup hasValidation>
+              
                           <Form.Label
                             htmlFor="username"
                             className="visually-hidden"
@@ -112,14 +109,14 @@ const FormRegistration = () => {
                               isInvalid={touched.username && errors.username}
                               required
                             />
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Control.Feedback type="invalid" tooltip>
                               {errors.username}
                             </Form.Control.Feedback>
                           </FloatingLabel>
-                        </InputGroup>
+                        
                       </Form.Group>
                       <Form.Group className="mb-4">
-                        <InputGroup hasValidation>
+              
                           <Form.Label
                             htmlFor="password"
                             className="visually-hidden"
@@ -139,14 +136,14 @@ const FormRegistration = () => {
                               isInvalid={touched.password && errors.password}
                               required
                             />
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Control.Feedback type="invalid" tooltip>
                               {errors.password}
                             </Form.Control.Feedback>
                           </FloatingLabel>
-                        </InputGroup>
+                        
                       </Form.Group>
                       <Form.Group as={Col} className="mb-4">
-                        <InputGroup hasValidation>
+              
                           <Form.Label
                             htmlFor="password"
                             className="visually-hidden"
@@ -169,13 +166,13 @@ const FormRegistration = () => {
                               }
                               required
                             />
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Control.Feedback type="invalid" tooltip>
                               {errors.confirmPassword}
                             </Form.Control.Feedback>
                           </FloatingLabel>
-                        </InputGroup>
+                        
                       </Form.Group>
-                      <Button type="submit" className="w-100 mb-3">
+                      <Button type="submit" variant="outline-primary" className="w-100 mb-3">
                         {t("text.register")}
                       </Button>
                     </Form>
@@ -185,8 +182,6 @@ const FormRegistration = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
   );
 };
 export default FormRegistration;
