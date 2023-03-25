@@ -15,6 +15,8 @@ import Button from "react-bootstrap/Button";
 import ModalChannel from "./NewChannelModal.js";
 import DropdownMenu from "./DropdownMenu";
 import socket from "./socket";
+import filter from 'leo-profanity';
+
 
 const Chat = () => {
   const [showNewChannel, setShowNewChannel] = useState(false);
@@ -26,6 +28,9 @@ const Chat = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
+    filter.add(filter.getDictionary('en'))
+    filter.add(filter.getDictionary('ru'))
+
     socket.on("removeChannel", (payload) => {
       dispatch(removeChannel(payload));
       console.log(data.currentChannelId === payload.id);
@@ -68,8 +73,10 @@ const Chat = () => {
       message: "",
     },
     onSubmit: ({ message }) => {
+      const filterMessege = filter.clean(message)
+      console.log(filterMessege)
       socket.emit("newMessage", {
-        body: message,
+        body: filterMessege,
         channelId: currentChannelId,
         username: userName,
       });
