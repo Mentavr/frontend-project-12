@@ -1,18 +1,17 @@
 import i18n from "i18next"
 import { initReactI18next } from "react-i18next";
 
+
 i18n
 .use(initReactI18next)
 .init({
     lng: "ru",
     debug: true,
     fallbacklng: "ru",
-    interpolation: {
-        escapeValue: false, 
-      },
     resources: {
         ru: {
           translation: {
+            icu:"{{count, plural, one {сообщение} few {сообщения} many {сообщений}}",
             text: {
               chanel: "Каналы",
               enter: "Войти", 
@@ -38,6 +37,9 @@ i18n
               createChanalSuccess: "Канал создан", 
               removeChanalSuccess: "Канал удален",
               renameChanalSuccess: "Канал переименован",
+              pageNotFound: "Страница не найдена",
+              dontEnter: "Но вы можете перейти ",
+              goToMainPage: "на главную страницу",
             },
               errors: {
                 passwordNotMatch: "Пароли должны совпадать",

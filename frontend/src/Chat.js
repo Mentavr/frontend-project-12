@@ -27,6 +27,8 @@ const Chat = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+
+
   useEffect(() => {
     filter.add(filter.getDictionary('en'))
     filter.add(filter.getDictionary('ru'))
@@ -58,9 +60,6 @@ const Chat = () => {
 
   const countMassage = data.messages.filter(message => message.channelId === currentChannelId)
 
-
-  // под вопросом ......
-
   const exitHandler = () => {
     dispatch(logOut());
   };
@@ -74,7 +73,6 @@ const Chat = () => {
     },
     onSubmit: ({ message }) => {
       const filterMessege = filter.clean(message)
-      console.log(filterMessege)
       socket.emit("newMessage", {
         body: filterMessege,
         channelId: currentChannelId,
@@ -170,7 +168,8 @@ const Chat = () => {
                         <b># {currentChanel.name}</b>
                       </p>
                       <span className="text-muted">
-                        {countMassage.length} {t("text.messeges")}
+                        {/* {countMassage.length} {t("text.messeges")} */}
+                        {t("icu", {count: countMassage.length})}
                       </span>
                     </div>
                     <div
