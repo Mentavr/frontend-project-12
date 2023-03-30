@@ -36,10 +36,10 @@ const rollbarConfig = {
   environment: "testenv",
 };
 
-function TestError() {
-  const a = null;
-  return a.hello();
-}
+// function TestError() {
+//   const a = null;
+//   return a.hello();
+// }
 
 const App = () => {
   return (

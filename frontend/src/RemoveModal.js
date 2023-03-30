@@ -25,7 +25,6 @@ const RemoveChannel = ({show,  handleClose, id }) => {
     <>
       <Modal
         show={show}
-        autoFocus
         onHide={handleClose}
         backdrop="static"
         keyboard={true}

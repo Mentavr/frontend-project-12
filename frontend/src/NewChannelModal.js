@@ -14,6 +14,8 @@ const ModalChannel = ({
   show,
   handleClose,
 }) => {
+
+
   const namesChannels = useSelector((state) =>
     state.users.data.channels.map((channel) => channel.name)
   );
@@ -35,9 +37,10 @@ const ModalChannel = ({
       socket.emit("newChannel", { name: values.newChannel });
       toast.success(t("text.createChanalSuccess"))
       handleClose();
+      values.newChannel = '';
     },
   });
-  const { handleSubmit, handleChange, errors, values, handleBlur, touched } = formik;
+  const { handleSubmit, handleChange, errors, values, touched } = formik;
 
   return (
     <>
@@ -59,7 +62,6 @@ const ModalChannel = ({
                   {t("text.nameChanel")}
                 </Form.Label>
                 <Form.Control
-                  autoFocus
                   className="mb-2"
                   id="newChannel"
                   name="newChannel"
@@ -68,8 +70,8 @@ const ModalChannel = ({
                   onChange={handleChange}
                   value={values.newChannel}
                   isInvalid={touched.newChannel && errors.newChannel}
-                  onBlur={handleBlur}
                   required
+                  autoFocus
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.newChannel}
@@ -77,8 +79,8 @@ const ModalChannel = ({
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
               <Button
-                type="submit"
                 className="me-2 btn-secondary"
+                onClick={handleClose}
               >
                 {t("text.cancel")}
               </Button>

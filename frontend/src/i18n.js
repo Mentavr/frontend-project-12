@@ -1,9 +1,11 @@
 import i18n from "i18next"
 import { initReactI18next } from "react-i18next";
+import ICU from "i18next-icu";
 
 
 i18n
 .use(initReactI18next)
+.use(ICU)
 .init({
     lng: "ru",
     debug: true,
@@ -11,7 +13,7 @@ i18n
     resources: {
         ru: {
           translation: {
-            icu:"{{count, plural, one {сообщение} few {сообщения} many {сообщений}}",
+            icu:"{count, plural, =0 {# сообщений} =1 {# сообщение} =2 {# сообщения} =3 {# сообщения} =4 {# сообщения} other {# сообшений}}",
             text: {
               chanel: "Каналы",
               enter: "Войти", 

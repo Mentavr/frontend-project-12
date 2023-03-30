@@ -8,16 +8,22 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { useSelector } from "react-redux";
-import { toast } from 'react-toastify';
-
+import { toast } from "react-toastify";
+import useAutoFocus from "./hooks/useAutoFocus.js";
 
 const RenameChannel = ({ show, handleClose, idChannel }) => {
-  const { t } = useTranslation()
+
+
+
+  const { t } = useTranslation();
 
   const namesChannels = useSelector((state) =>
-  state.users.data.channels.map((channel) => channel.name)
-);
-
+    state.users.data.channels.map((channel) => channel.name)
+  );
+  const currentChanel = useSelector((state) => state.users.data.channels).find(
+    (channel) => idChannel === channel.id
+  );
+  const { name } = currentChanel;
 
   const SignupSchema = Yup.object({
     renameChannel: Yup.string()
@@ -37,13 +43,13 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
         id: idChannel,
         name: value.renameChannel,
       });
-      toast.success(t("text.renameChanalSuccess"))
+      toast.success(t("text.renameChanalSuccess"));
       handleClose();
     },
   });
 
-  const { handleSubmit, handleChange, handleBlur, errors, values, touched } = formik;
-
+  const { handleSubmit, handleChange, errors, values, touched } = formik;
+  const inputRename = useAutoFocus()
   return (
     <>
       <Modal
@@ -53,7 +59,6 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
         keyboard={true}
         centered
         restoreFocus="true"
-        autoFocus
       >
         <Modal.Header closeButton>
           <Modal.Title>{t("text.renameChannel")}</Modal.Title>
@@ -61,24 +66,24 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
         <Modal.Body>
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group as={Col} htmlFor="validationFormikRenameChannel">
-                <Form.Label className="visually-hidden" htmlFor="renameChannel">
-                  {t("text.nameChanel")}
-                </Form.Label>
-                <Form.Control
-                  className="mb-2"
-                  id="renameChannel"
-                  name="renameChannel"
-                  type="text"
-                  autoComplete="renameChannel"
-                  onChange={handleChange}
-                  value={values.renameChannel}
-                  isInvalid={touched.renameChannel && errors.renameChannel}
-                  onBlur={handleBlur}
-                  required
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.renameChannel}
-                </Form.Control.Feedback>
+              <Form.Label className="visually-hidden" htmlFor="renameChannel">
+                {t("text.nameChanel")}
+              </Form.Label>
+              <Form.Control
+                ref={inputRename}
+                className="mb-2"
+                id="renameChannel"
+                name="renameChannel"
+                type="text"
+                autoComplete="renameChannel"
+                onChange={handleChange}
+                value={values.renameChannel}
+                isInvalid={touched.renameChannel && errors.renameChannel}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.renameChannel}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="d-flex justify-content-end">
               <Button
@@ -88,10 +93,7 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
               >
                 {t("text.cancel")}
               </Button>
-              <Button
-                type="submit"
-                variant="primary"
-              >
+              <Button type="submit" variant="primary">
                 {t("text.sendForm")}
               </Button>
             </Form.Group>
