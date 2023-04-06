@@ -1,29 +1,31 @@
 import React from "react";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { closeModal } from "./slice/modalNewChannel";
+import useAutoFocus from "./hooks/useAutoFocus";
 import socket from "./socket";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import useAutoFocus from "./hooks/useAutoFocus.js";
 
-const RenameChannel = ({ show, handleClose, idChannel }) => {
+const RenameChannel = ({ idChannel }) => {
+  const renameFocus = useAutoFocus();
 
-
-
+  const dispatch = useDispatch();
   const { t } = useTranslation();
+  const handleClose = () => dispatch(closeModal());
 
   const namesChannels = useSelector((state) =>
     state.users.data.channels.map((channel) => channel.name)
   );
-  const currentChanel = useSelector((state) => state.users.data.channels).find(
-    (channel) => idChannel === channel.id
-  );
-  const { name } = currentChanel;
+  // const currentChanel = useSelector((state) => state.users.data.channels).find(
+  //   (channel) => idChannel === channel.id
+  // );
+  // const { name } = currentChanel;
 
   const SignupSchema = Yup.object({
     renameChannel: Yup.string()
@@ -49,16 +51,16 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
   });
 
   const { handleSubmit, handleChange, errors, values, touched } = formik;
-  const inputRename = useAutoFocus()
   return (
     <>
       <Modal
-        show={show}
+        show={true}
         onHide={handleClose}
         backdrop="static"
         keyboard={true}
         centered
         restoreFocus="true"
+        autoFocus
       >
         <Modal.Header closeButton>
           <Modal.Title>{t("text.renameChannel")}</Modal.Title>
@@ -70,7 +72,7 @@ const RenameChannel = ({ show, handleClose, idChannel }) => {
                 {t("text.nameChanel")}
               </Form.Label>
               <Form.Control
-                ref={inputRename}
+                ref={renameFocus}
                 className="mb-2"
                 id="renameChannel"
                 name="renameChannel"

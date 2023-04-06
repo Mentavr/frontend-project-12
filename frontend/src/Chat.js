@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef} from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { userData } from "./slice/usersData";
@@ -12,26 +12,22 @@ import {
 } from "./slice/usersData";
 import { useTranslation } from "react-i18next";
 import Button from "react-bootstrap/Button";
-import ModalChannel from "./NewChannelModal.js";
 import DropdownMenu from "./DropdownMenu";
 import socket from "./socket";
-import filter from 'leo-profanity';
+import filter from "leo-profanity";
+import { openModal } from "./slice/modalNewChannel";
 
+
+
+import { Trans } from 'react-i18next';
 
 const Chat = () => {
-  const [showNewChannel, setShowNewChannel] = useState(false);
-
-  const handleCloseNewChannel = () => setShowNewChannel(false);
-  const handleShowNewChannel = () => setShowNewChannel(true);
-
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-
-
   useEffect(() => {
-    filter.add(filter.getDictionary('en'))
-    filter.add(filter.getDictionary('ru'))
+    filter.add(filter.getDictionary("en"));
+    filter.add(filter.getDictionary("ru"));
 
     socket.on("removeChannel", (payload) => {
       dispatch(removeChannel(payload));
@@ -49,16 +45,19 @@ const Chat = () => {
     });
     dispatch(userData());
     return () => {
-      socket.removeAllListeners()
-    }
+      socket.removeAllListeners();
+    };
   }, []);
 
   const userName = JSON.parse(localStorage.userId).username;
   const data = useSelector((state) => state.users.data);
   const { currentChannelId } = useSelector((state) => state.users.data);
-  const currentChanel = data.channels.find(channel => channel.id === currentChannelId) || "general";
-
-  const countMassage = data.messages.filter(message => message.channelId === currentChannelId)
+  const currentChanel =
+    data.channels.find((channel) => channel.id === currentChannelId) ||
+    "general";
+  const countMassage = data.messages.filter(
+    (message) => message.channelId === currentChannelId
+  );
 
   const exitHandler = () => {
     dispatch(logOut());
@@ -66,22 +65,26 @@ const Chat = () => {
   const choseChannelHandler = (e) => {
     dispatch(setChannel(Number(e.target.id)));
   };
-  
+  const hendlerNewModalChannel = () => {
+    dispatch(openModal({ opened: "newChannelModal", idChannel: null }));
+  };
+
   const formik = useFormik({
     initialValues: {
       message: "",
     },
     onSubmit: ({ message }) => {
-      const filterMessege = filter.clean(message)
+      const filterMessege = filter.clean(message);
       socket.emit("newMessage", {
         body: filterMessege,
         channelId: currentChannelId,
         username: userName,
       });
-      values.message = '';
+      values.message = "";
     },
   });
-  const {handleSubmit, values, handleChange} = formik
+  const { handleSubmit, values, handleChange } = formik;
+
   return (
     <>
       <div className="h-100">
@@ -90,7 +93,7 @@ const Chat = () => {
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
                 <a className="navbar-brand" href="/">
-                {t("text.hexletHeader")}
+                  {t("text.hexletHeader")}
                 </a>
                 <button
                   type="button"
@@ -103,13 +106,13 @@ const Chat = () => {
             </nav>
             <div className="container h-100 my-4 overflow-hidden rounded shadow">
               <div className="row h-100 bg-white flex-md-row">
-                <div className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
-                  <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-                    <span>{t("text.chanel")}</span>
+                <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
+                  <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
+                    <b>{t("text.chanel")}</b>
                     <Button
                       className="p-0 text-primary btn btn-group-vertical"
                       variant="first"
-                      onClick={handleShowNewChannel}
+                      onClick={() => hendlerNewModalChannel()}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -123,12 +126,8 @@ const Chat = () => {
                         <span className="visually-hidden">+</span>
                       </svg>
                     </Button>
-                    <ModalChannel
-                      show={showNewChannel}
-                      handleClose={handleCloseNewChannel}
-                    />
                   </div>
-                  <ul className="nav flex-column nav-pills nav-fill px-2">
+                  <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
                     {data.channels.map((elem) => {
                       const activeButton =
                         elem.id === currentChannelId
@@ -141,7 +140,6 @@ const Chat = () => {
                               activeButton={activeButton}
                               elem={elem}
                               choseChannelHandler={choseChannelHandler}
-                              currentChannelId={currentChannelId}
                             />
                           </li>
                         );
@@ -153,9 +151,6 @@ const Chat = () => {
                             className={`w-100 rounded-0 text-start btn ${activeButton}`}
                             id={elem.id}
                             onClick={choseChannelHandler}
-                            // inputRef={inputRef}
-                            // setRef={setRef}
-
                           >
                             <span className="me-1">#</span>
                             {elem.name}
@@ -172,7 +167,10 @@ const Chat = () => {
                         <b># {currentChanel.name}</b>
                       </p>
                       <span className="text-muted">
-                        {t("icu", {count: countMassage.length})}
+                      <Trans 
+                      i18nKey="icu_and_trans"
+                      values={{ count: countMassage.length }}
+                      /> 
                       </span>
                     </div>
                     <div
@@ -209,7 +207,9 @@ const Chat = () => {
                           />
                           <button
                             type="submit"
-                            className="btn btn-group-vertical"
+                            className="btn btn-group-vertical border-0"
+                            disabled={!values.message}
+                            
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -223,7 +223,9 @@ const Chat = () => {
                                 d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
                               ></path>
                             </svg>
-                            <span className="visually-hidden">{t("text.sendForm")}</span>
+                            <span className="visually-hidden">
+                              {t("text.sendForm")}
+                            </span>
                           </button>
                         </div>
                       </form>

@@ -1,28 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
-import RemoveModal from "./RemoveModal";
-import RenameModal from "./RenameModal";
 import { useTranslation } from "react-i18next";
+import {
+  openModal, 
+} from "./slice/modalNewChannel";
+import { useDispatch } from "react-redux";
 
 
 const DropdownMenu = (props) => {
+  const dispatch = useDispatch()
   const { t } = useTranslation()
-  const { activeButton, elem, choseChannelHandler} = props;
-  const [showRemove, setShowRemove] = useState(false);
-  const [showRename, setShowRename] = useState(false);
+  const { activeButton, elem, choseChannelHandler } = props;
 
-  const handleCloseRemove = () => setShowRemove(false);
-  const handleShowRemove = () => setShowRemove(true);
-  const handleCloseRename = () => setShowRename(false);
-  const handleShowRename = () => setShowRename(true);
+  const handlerOpenModal = (modalName, id) => {
+    dispatch(openModal({opened: modalName, idChannel: id}))
+  }
 
   return (
-    <Dropdown as={ButtonGroup} className="d-flex dropdown btn-group">
+    <Dropdown as={ButtonGroup}  className="d-flex">
       <Button
         type="button"
-        className={`w-100 rounded-0 text-start btn ${activeButton}`}
+        className={`d-flex w-100 rounded-0 text-truncate btn  ${activeButton}`}
         id={elem.id}
         onClick={choseChannelHandler}
       >
@@ -35,22 +35,12 @@ const DropdownMenu = (props) => {
         className={`flex-grow-0 dropdown-toggle dropdown-toggle-split btn btn-secondary ${activeButton}`}
       ></Dropdown.Toggle>
       <Dropdown.Menu>
-        <Dropdown.Item href="#" onClick={handleShowRemove}>
+        <Dropdown.Item href="#" onClick={() => handlerOpenModal('removeModalChannel', elem.id)}>
           {t("text.remove")}
         </Dropdown.Item>
-        <RemoveModal
-          show={showRemove}
-          handleClose={handleCloseRemove}
-          id={elem.id}
-        />
-        <Dropdown.Item href="#" onClick={handleShowRename}>
+        <Dropdown.Item href="#" onClick={() => handlerOpenModal('renameChannelModal', elem.id)}>
           {t("text.rename")}
         </Dropdown.Item>
-        <RenameModal
-          show={showRename}
-          handleClose={handleCloseRename}
-          idChannel={elem.id}
-        />
       </Dropdown.Menu>
     </Dropdown>
   );

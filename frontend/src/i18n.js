@@ -13,8 +13,9 @@ i18n
     resources: {
         ru: {
           translation: {
-            icu:"{count, plural, =0 {# сообщений} =1 {# сообщение} =2 {# сообщения} =3 {# сообщения} =4 {# сообщения} other {# сообшений}}",
+            icu_and_trans: "{count, plural, one {# Сообщение} few {# Сообщения} many {# Сообщений} other {# Сообщений}}",
             text: {
+              userNameRegistration: "Имя пользователя", 
               chanel: "Каналы",
               enter: "Войти", 
               exit: "Выйти",

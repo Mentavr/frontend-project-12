@@ -18,6 +18,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React from "react";
 import { Provider , ErrorBoundary } from "@rollbar/react";
+import ModalWraper from "./ModalWraper"
 
 const PrivateRoute = ({ children }) => {
   localStorage.getItem("userId");
@@ -64,6 +65,7 @@ const App = () => {
               <Route path="*" element={<ErrorPage />}/>
             </Routes>
           </Router>
+          <ModalWraper />
       </ProviderReduce>
       </ErrorBoundary>
       </Provider>

@@ -93,11 +93,11 @@ const FormRegistration = () => {
                             htmlFor="username"
                             className="visually-hidden"
                           >
-                            {t("text.userName")}
+                            {t("text.userNameRegistration")}
                           </Form.Label>
-                          <FloatingLabel label="Ваш ник">
+                          <FloatingLabel label="Имя пользователя">
                             <Form.Control
-                              placeholder="Ваш ник"
+                              placeholder="Имя пользователя"
                               ref={inputRef}
                               id="username"
                               name="username"
