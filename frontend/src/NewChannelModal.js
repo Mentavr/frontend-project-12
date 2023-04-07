@@ -35,7 +35,7 @@ const ModalChannel = () => {
     validationSchema: SignupSchema,
     onSubmit: ({newChannel}) => {
       const filterMessege = filter.clean(newChannel);
-      socket.emit("newChannel", { name: values.newChannel });
+      socket.emit("newChannel", { name: filterMessege });
       toast.success(t("text.createChanalSuccess"));
       handleClose();
       values.newChannel = "";

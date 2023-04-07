@@ -146,7 +146,7 @@ const FormRegistration = () => {
                       <Form.Group as={Col} className="mb-4">
               
                           <Form.Label
-                            htmlFor="password"
+                            htmlFor="confirmPassword"
                             className="visually-hidden"
                           >
                             {t("text.confirmPassword")}
