@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { closeModal } from "./slice/modalNewChannel";
+import filter from "leo-profanity";
 
 const ModalChannel = () => {
   const { t } = useTranslation();
@@ -32,7 +33,8 @@ const ModalChannel = () => {
       newChannel: "",
     },
     validationSchema: SignupSchema,
-    onSubmit: () => {
+    onSubmit: ({newChannel}) => {
+      const filterMessege = filter.clean(newChannel);
       socket.emit("newChannel", { name: values.newChannel });
       toast.success(t("text.createChanalSuccess"));
       handleClose();

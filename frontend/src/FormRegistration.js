@@ -55,6 +55,7 @@ const FormRegistration = () => {
         dispatch(logIn());
         navigate("/");
       } catch (error) {
+        console.log(error)
         errors.confirmPassword = t("errors.existUser");
         dispatch(logOut());
       }
