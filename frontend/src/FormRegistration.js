@@ -83,9 +83,9 @@ const FormRegistration = () => {
                 <Form onSubmit={handleSubmit} className="w-50">
                   <h1 className="text-center mb-4">{t("text.registration")}</h1>
                   <Form.Group className="mb-3">
-                    <FloatingLabel htmlFor="username" label="Имя пользователя">
+                    <FloatingLabel label="Имя пользователя">
                       <Form.Control
-                        placeholder="Имя пользователя"
+                        placeholder="От 3 до 20 символов"
                         ref={inputRef}
                         id="username"
                         name="username"
@@ -103,9 +103,9 @@ const FormRegistration = () => {
                     </FloatingLabel>
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <FloatingLabel  htmlFor="password" label="Пароль">
+                    <FloatingLabel label="Пароль">
                       <Form.Control
-                        placeholder="Пароль"
+                        placeholder="Не менее 6 символов"
                         id="password"
                         name="password"
                         type="password"
@@ -122,9 +122,9 @@ const FormRegistration = () => {
                     </FloatingLabel>
                   </Form.Group>
                   <Form.Group as={Col} className="mb-4">
-                    <FloatingLabel htmlFor="confirmPassword" label="Подтвердите пароль">
+                    <FloatingLabel label="Подтвердите пароль">
                       <Form.Control
-                        placeholder="Подтвердите пароль"
+                        placeholder="Пароли должны совпадать"
                         id="confirmPassword"
                         name="confirmPassword"
                         type="password"
