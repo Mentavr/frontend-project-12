@@ -93,12 +93,12 @@ const FormAtorithation = () => {
                       <h1 className="text-center mb-4">{t("text.enter")}</h1>
                        <Form.Group>
                   
-                       <Form.Label
+                       {/* <Form.Label
                             htmlFor="username"
                             className="visually-hidden"
                           >
                             {t("text.userName")}
-                          </Form.Label>
+                          </Form.Label> */}
                           <FloatingLabel label="Ваш ник">
                             <Form.Control
                               className="mb-3"
