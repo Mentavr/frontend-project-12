@@ -22,7 +22,7 @@ i18n
               hexletHeader: 'Hexlet Chat',
               registration: "Регистрация",
               register: "Зарегестрироваться",
-              confirmPassword: "Подтвердить пароль",
+              confirmPassword: "Подтвердите пароль",
               password: "Пароль",
               userName: "Ваш ник",
               noAccount: "Нет аккаунта?",

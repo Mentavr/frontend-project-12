@@ -13,7 +13,6 @@ import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Col from "react-bootstrap/Col";
 
-
 const FormRegistration = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -55,7 +54,7 @@ const FormRegistration = () => {
         dispatch(logIn());
         navigate("/");
       } catch (error) {
-        console.log(error)
+        console.log(error);
         errors.confirmPassword = t("errors.existUser");
         dispatch(logOut());
       }
@@ -65,124 +64,110 @@ const FormRegistration = () => {
     formik;
 
   return (
-        <div className="d-flex flex-column h-100">
-          <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-            <div className="container">
-              <a className="navbar-brand" href="/">
-                {t("text.hexletHeader")}
-              </a>
-            </div>
-          </nav>
-          <div className="container-fluid h-100">
-            <div className="row justify-content-center align-content-center h-100">
-              <div className="col-12 col-md-8 col-xxl-6">
-                <div className="card shadow-sm">
-                  <div className="card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
-                    <div>
-                      <img className="rounded-circle" src={img} alt="" />
-                    </div>
-                    <Form
-                      onSubmit={handleSubmit}
-                      className="w-50"
-                    >
-                      <h1 className="text-center mb-4">
-                        {t("text.registration")}
-                      </h1>
-                      <Form.Group className="mb-3">
-              
-                          <Form.Label
-                            htmlFor="username"
-                            className="visually-hidden"
-                          >
-                            {t("text.userNameRegistration")}
-                          </Form.Label>
-                          <FloatingLabel label="Имя пользователя">
-                            <Form.Control
-                              placeholder="Имя пользователя"
-                              ref={inputRef}
-                              id="username"
-                              name="username"
-                              type="text"
-                              onChange={handleChange}
-                              value={values.username}
-                              onBlur={handleBlur}
-                              autoComplete="username"
-                              isInvalid={touched.username && errors.username}
-                              required
-                            />
-                            <Form.Control.Feedback type="invalid" tooltip>
-                              {errors.username}
-                            </Form.Control.Feedback>
-                          </FloatingLabel>
-                        
-                      </Form.Group>
-                      <Form.Group className="mb-4">
-              
-                          <Form.Label
-                            htmlFor="password"
-                            className="visually-hidden"
-                          >
-                            {t("text.password")}
-                          </Form.Label>
-                          <FloatingLabel label="Пароль">
-                            <Form.Control
-                              placeholder="Пароль"
-                              id="password"
-                              name="password"
-                              type="password"
-                              onChange={handleChange}
-                              value={values.password}
-                              onBlur={handleBlur}
-                              autoComplete="current-password"
-                              isInvalid={touched.password && errors.password}
-                              required
-                            />
-                            <Form.Control.Feedback type="invalid" tooltip>
-                              {errors.password}
-                            </Form.Control.Feedback>
-                          </FloatingLabel>
-                        
-                      </Form.Group>
-                      <Form.Group as={Col} className="mb-4">
-              
-                          <Form.Label
-                            htmlFor="confirmPassword"
-                            className="visually-hidden"
-                          >
-                            {t("text.confirmPassword")}
-                          </Form.Label>
-                          <FloatingLabel label="Подтвердить пароль">
-                            <Form.Control
-                              placeholder="Подтвердить пароль"
-                              id="confirmPassword"
-                              name="confirmPassword"
-                              type="password"
-                              onChange={handleChange}
-                              value={values.confirmPassword}
-                              onBlur={handleBlur}
-                              autoComplete="current-password"
-                              isInvalid={
-                                touched.confirmPassword &&
-                                errors.confirmPassword
-                              }
-                              required
-                            />
-                            <Form.Control.Feedback type="invalid" tooltip>
-                              {errors.confirmPassword}
-                            </Form.Control.Feedback>
-                          </FloatingLabel>
-                        
-                      </Form.Group>
-                      <Button type="submit" variant="outline-primary" className="w-100 mb-3">
-                        {t("text.register")}
-                      </Button>
-                    </Form>
-                  </div>
+    <div className="d-flex flex-column h-100">
+      <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
+        <div className="container">
+          <a className="navbar-brand" href="/">
+            {t("text.hexletHeader")}
+          </a>
+        </div>
+      </nav>
+      <div className="container-fluid h-100">
+        <div className="row justify-content-center align-content-center h-100">
+          <div className="col-12 col-md-8 col-xxl-6">
+            <div className="card shadow-sm">
+              <div className="card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
+                <div>
+                  <img className="rounded-circle" src={img} alt="" />
                 </div>
+                <Form onSubmit={handleSubmit} className="w-50">
+                  <h1 className="text-center mb-4">{t("text.registration")}</h1>
+                  <Form.Group className="mb-3">
+                    <Form.Label htmlFor="username" className="visually-hidden">
+                      {t("text.userNameRegistration")}
+                    </Form.Label> 
+                    <FloatingLabel label="Имя пользователя">
+                      <Form.Control
+                        placeholder="Имя пользователя"
+                        ref={inputRef}
+                        id="username"
+                        name="username"
+                        type="text"
+                        onChange={handleChange}
+                        value={values.username}
+                        onBlur={handleBlur}
+                        autoComplete="username"
+                        isInvalid={touched.username && errors.username}
+                        required
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>
+                        {errors.username}
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label htmlFor="password" className="visually-hidden">
+                      {t("text.password")}
+                    </Form.Label>
+                    <FloatingLabel label="Пароль">
+                      <Form.Control
+                        placeholder="Пароль"
+                        id="password"
+                        name="password"
+                        type="password"
+                        onChange={handleChange}
+                        value={values.password}
+                        onBlur={handleBlur}
+                        autoComplete="current-password"
+                        isInvalid={touched.password && errors.password}
+                        required
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>
+                        {errors.password}
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group as={Col} className="mb-4">
+                    <Form.Label
+                      htmlFor="confirmPassword"
+                      className="visually-hidden"
+                    >
+                      {t("text.confirmPassword")}
+                    </Form.Label>
+                    <FloatingLabel label="Подтвердите пароль">
+                      <Form.Control
+                        placeholder="Подтвердите пароль"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        onChange={handleChange}
+                        value={values.confirmPassword}
+                        onBlur={handleBlur}
+                        autoComplete="current-password"
+                        isInvalid={
+                          touched.confirmPassword && errors.confirmPassword
+                        }
+                        required
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>
+                        {errors.confirmPassword}
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Button
+                    type="submit"
+                    variant="outline-primary"
+                    className="w-100 mb-3"
+                  >
+                    {t("text.register")}
+                  </Button>
+                </Form>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
   );
 };
 export default FormRegistration;
