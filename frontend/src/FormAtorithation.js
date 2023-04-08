@@ -92,13 +92,6 @@ const FormAtorithation = () => {
                     >
                       <h1 className="text-center mb-4">{t("text.enter")}</h1>
                        <Form.Group>
-                  
-                       {/* <Form.Label
-                            htmlFor="username"
-                            className="visually-hidden"
-                          >
-                            {t("text.userName")}
-                          </Form.Label> */}
                           <FloatingLabel label="Ваш ник">
                             <Form.Control
                               className="mb-3"
@@ -121,12 +114,6 @@ const FormAtorithation = () => {
            
                       </Form.Group>
                       <Form.Group className="mb-4">
-                          <Form.Label
-                            htmlFor="password"
-                            className="visually-hidden"
-                          >
-                            {t("text.password")}
-                          </Form.Label>
                           <FloatingLabel label="Пароль">
                             <Form.Control
                               placeholder="Пароль"

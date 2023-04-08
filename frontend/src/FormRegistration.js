@@ -83,9 +83,6 @@ const FormRegistration = () => {
                 <Form onSubmit={handleSubmit} className="w-50">
                   <h1 className="text-center mb-4">{t("text.registration")}</h1>
                   <Form.Group className="mb-3">
-                    <Form.Label htmlFor="username" className="visually-hidden">
-                      {t("text.userNameRegistration")}
-                    </Form.Label> 
                     <FloatingLabel label="Имя пользователя">
                       <Form.Control
                         placeholder="Имя пользователя"
@@ -106,9 +103,6 @@ const FormRegistration = () => {
                     </FloatingLabel>
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <Form.Label htmlFor="password" className="visually-hidden">
-                      {t("text.password")}
-                    </Form.Label>
                     <FloatingLabel label="Пароль">
                       <Form.Control
                         placeholder="Пароль"
@@ -128,12 +122,6 @@ const FormRegistration = () => {
                     </FloatingLabel>
                   </Form.Group>
                   <Form.Group as={Col} className="mb-4">
-                    <Form.Label
-                      htmlFor="confirmPassword"
-                      className="visually-hidden"
-                    >
-                      {t("text.confirmPassword")}
-                    </Form.Label>
                     <FloatingLabel label="Подтвердите пароль">
                       <Form.Control
                         placeholder="Подтвердите пароль"
