@@ -83,7 +83,7 @@ const FormRegistration = () => {
                 <Form onSubmit={handleSubmit} className="w-50">
                   <h1 className="text-center mb-4">{t("text.registration")}</h1>
                   <Form.Group className="mb-3">
-                    <FloatingLabel label="Имя пользователя">
+                    <FloatingLabel htmlFor="username" label="Имя пользователя">
                       <Form.Control
                         placeholder="Имя пользователя"
                         ref={inputRef}
@@ -103,7 +103,7 @@ const FormRegistration = () => {
                     </FloatingLabel>
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <FloatingLabel label="Пароль">
+                    <FloatingLabel  htmlFor="password" label="Пароль">
                       <Form.Control
                         placeholder="Пароль"
                         id="password"
@@ -122,7 +122,7 @@ const FormRegistration = () => {
                     </FloatingLabel>
                   </Form.Group>
                   <Form.Group as={Col} className="mb-4">
-                    <FloatingLabel label="Подтвердите пароль">
+                    <FloatingLabel htmlFor="confirmPassword" label="Подтвердите пароль">
                       <Form.Control
                         placeholder="Подтвердите пароль"
                         id="confirmPassword"
