@@ -92,7 +92,7 @@ const FormAtorithation = () => {
                     >
                       <h1 className="text-center mb-4">{t("text.enter")}</h1>
                        <Form.Group>
-                          <FloatingLabel label="Ваш ник">
+                          <Form.Floating>
                             <Form.Control
                               className="mb-3"
                               placeholder="Ваш ник"
@@ -107,14 +107,19 @@ const FormAtorithation = () => {
                               isInvalid={touched.username && errors.username}
                               required
                             />
+                                 <label
+                            htmlFor="username"
+                          >
+                            {t("text.userName")}
+                          </label>
                             <Form.Control.Feedback type="invalid" tooltip>
                               {errors.username}
                             </Form.Control.Feedback>
-                          </FloatingLabel>
+                          </Form.Floating>
            
                       </Form.Group>
                       <Form.Group className="mb-4">
-                          <FloatingLabel label="Пароль">
+                          <Form.Floating>
                             <Form.Control
                               placeholder="Пароль"
                               id="password"
@@ -127,10 +132,15 @@ const FormAtorithation = () => {
                               isInvalid={touched.password && errors.password}
                               required
                             />
+                               <label
+                            htmlFor="password"
+                          >
+                            {t("text.password")}
+                          </label>
                             <Form.Control.Feedback type="invalid" tooltip>
                               {errors.password}
                             </Form.Control.Feedback>
-                          </FloatingLabel>
+                          </Form.Floating>
                       </Form.Group>
                       <Button
                         type="submit"

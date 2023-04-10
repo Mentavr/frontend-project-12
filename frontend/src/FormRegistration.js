@@ -83,9 +83,12 @@ const FormRegistration = () => {
                 <Form onSubmit={handleSubmit} className="w-50">
                   <h1 className="text-center mb-4">{t("text.registration")}</h1>
                   <Form.Group className="mb-3">
-                    <FloatingLabel label="Имя пользователя">
+                  <Form.Floating>
+                      {/* <Form.label htmlFor="username" className="visually-hidden">
+                        {t("text.userNameRegistration")}
+                      </Form.label> */}
                       <Form.Control
-                        placeholder="От 3 до 20 символов"
+                        placeholder="Имя пользователя"
                         ref={inputRef}
                         id="username"
                         name="username"
@@ -97,15 +100,19 @@ const FormRegistration = () => {
                         isInvalid={touched.username && errors.username}
                         required
                       />
+                        <label htmlFor="username" >
+                      {t("text.userNameRegistration")}
+                    </label>
+                 
                       <Form.Control.Feedback type="invalid" tooltip>
                         {errors.username}
                       </Form.Control.Feedback>
-                    </FloatingLabel>
+                    </Form.Floating>
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <FloatingLabel label="Пароль">
+                    <Form.Floating>
                       <Form.Control
-                        placeholder="Не менее 6 символов"
+                        placeholder="Пароль"
                         id="password"
                         name="password"
                         type="password"
@@ -116,15 +123,18 @@ const FormRegistration = () => {
                         isInvalid={touched.password && errors.password}
                         required
                       />
+                             <label htmlFor="password" >
+                      {t("text.password")}
+                    </label>
                       <Form.Control.Feedback type="invalid" tooltip>
                         {errors.password}
                       </Form.Control.Feedback>
-                    </FloatingLabel>
+                    </Form.Floating>
                   </Form.Group>
                   <Form.Group as={Col} className="mb-4">
-                    <FloatingLabel label="Подтвердите пароль">
+                    <Form.Floating>
                       <Form.Control
-                        placeholder="Пароли должны совпадать"
+                        placeholder="Подтвердить пароль"
                         id="confirmPassword"
                         name="confirmPassword"
                         type="password"
@@ -137,10 +147,15 @@ const FormRegistration = () => {
                         }
                         required
                       />
+                       <label
+                      htmlFor="confirmPassword"
+                    >
+                      {t("text.confirmPassword")}
+                    </label>
                       <Form.Control.Feedback type="invalid" tooltip>
                         {errors.confirmPassword}
                       </Form.Control.Feedback>
-                    </FloatingLabel>
+                    </Form.Floating>
                   </Form.Group>
                   <Button
                     type="submit"
