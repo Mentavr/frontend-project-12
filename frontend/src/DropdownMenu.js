@@ -33,7 +33,9 @@ const DropdownMenu = (props) => {
         variant="first"
         id="dropdown-basic"
         className={`flex-grow-0 dropdown-toggle dropdown-toggle-split btn btn-secondary ${activeButton}`}
-      ></Dropdown.Toggle>
+      >
+        <span className="visually-hidden">Управление каналом</span>
+      </Dropdown.Toggle>
       <Dropdown.Menu>
         <Dropdown.Item href="#" onClick={() => handlerOpenModal('removeModalChannel', elem.id)}>
           {t("text.remove")}
