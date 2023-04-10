@@ -83,7 +83,7 @@ const FormRegistration = () => {
                 <Form onSubmit={handleSubmit} className="w-50">
                   <h1 className="text-center mb-4">{t("text.registration")}</h1>
                   <Form.Group className="mb-3">
-                  <Form.Floating>
+                    <Form.Floating>
                       {/* <Form.label htmlFor="username" className="visually-hidden">
                         {t("text.userNameRegistration")}
                       </Form.label> */}
@@ -100,10 +100,10 @@ const FormRegistration = () => {
                         isInvalid={touched.username && errors.username}
                         required
                       />
-                        <label htmlFor="username" >
-                      {t("text.userNameRegistration")}
-                    </label>
-                 
+                      <label htmlFor="username">
+                        {t("text.userNameRegistration")}
+                      </label>
+
                       <Form.Control.Feedback type="invalid" tooltip>
                         {errors.username}
                       </Form.Control.Feedback>
@@ -123,9 +123,7 @@ const FormRegistration = () => {
                         isInvalid={touched.password && errors.password}
                         required
                       />
-                             <label htmlFor="password" >
-                      {t("text.password")}
-                    </label>
+                      <label htmlFor="password">{t("text.password")}</label>
                       <Form.Control.Feedback type="invalid" tooltip>
                         {errors.password}
                       </Form.Control.Feedback>
@@ -147,11 +145,9 @@ const FormRegistration = () => {
                         }
                         required
                       />
-                       <label
-                      htmlFor="confirmPassword"
-                    >
-                      {t("text.confirmPassword")}
-                    </label>
+                      <label htmlFor="confirmPassword">
+                        {t("text.confirmPassword")}
+                      </label>
                       <Form.Control.Feedback type="invalid" tooltip>
                         {errors.confirmPassword}
                       </Form.Control.Feedback>

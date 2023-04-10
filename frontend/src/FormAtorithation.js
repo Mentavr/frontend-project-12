@@ -2,8 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import { logIn, logOut } from './slice/authLogger';
+import { useDispatch } from "react-redux";
+import { logIn, logOut } from "./slice/authLogger";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import img from "./image/projectMen.jpeg";
@@ -14,7 +14,7 @@ import Form from "react-bootstrap/Form";
 
 import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const FormAtorithation = () => {
   const { t } = useTranslation();
@@ -28,12 +28,9 @@ const FormAtorithation = () => {
   }, []);
 
   const SignupSchema = Yup.object({
-    username: Yup.string()
-    .required(t("errors.required")),
-    password: Yup.string()
-    .required(t("errors.required")),
+    username: Yup.string().required(t("errors.required")),
+    password: Yup.string().required(t("errors.required")),
   });
-
 
   const formik = useFormik({
     initialValues: {
@@ -47,24 +44,24 @@ const FormAtorithation = () => {
         localStorage.setItem("userId", JSON.stringify(login.data));
         dispatch(logIn());
         navigate("/");
-      } catch ({request}){
-        const numberError = request.status
-        switch(numberError) {
-          case 401 :
-            errors.password = t("errors.enterNickPassword")
-          break
-          case 0 :
-            toast.error(t("errors.errorConnect"))
-          break
+      } catch ({ request }) {
+        const numberError = request.status;
+        switch (numberError) {
+          case 401:
+            errors.password = t("errors.enterNickPassword");
+            break;
+          case 0:
+            toast.error(t("errors.errorConnect"));
+            break;
           default:
-          new Error('что-то пошло не так')
+            new Error("что-то пошло не так");
         }
         dispatch(logOut());
       }
     },
-  })
+  });
   const { errors, touched, values, handleChange, handleBlur, handleSubmit } =
-  formik;
+    formik;
 
   return (
     <div className="h-100">
@@ -85,67 +82,55 @@ const FormAtorithation = () => {
                     <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
                       <img className="rounded-circle" src={img} alt="" />
                     </div>
-                    
+
                     <Form
                       onSubmit={handleSubmit}
                       className="col-12 col-md-6 mt-3 mt-mb-0"
                     >
                       <h1 className="text-center mb-4">{t("text.enter")}</h1>
-                       <Form.Group>
-                          <Form.Floating>
-                            <Form.Control
-                              className="mb-3"
-                              placeholder="Ваш ник"
-                              ref={inputRef}
-                              id="username"
-                              name="username"
-                              type="text"
-                              onChange={handleChange}
-                              value={values.username}
-                              onBlur={handleBlur}
-                              autoComplete="username"
-                              isInvalid={touched.username && errors.username}
-                              required
-                            />
-                                 <label
-                            htmlFor="username"
-                          >
-                            {t("text.userName")}
-                          </label>
-                            <Form.Control.Feedback type="invalid" tooltip>
-                              {errors.username}
-                            </Form.Control.Feedback>
-                          </Form.Floating>
-           
+                      <Form.Group>
+                        <Form.Floating>
+                          <Form.Control
+                            className="mb-3"
+                            placeholder="Ваш ник"
+                            ref={inputRef}
+                            id="username"
+                            name="username"
+                            type="text"
+                            onChange={handleChange}
+                            value={values.username}
+                            onBlur={handleBlur}
+                            autoComplete="username"
+                            isInvalid={touched.username && errors.username}
+                            required
+                          />
+                          <label htmlFor="username">{t("text.userName")}</label>
+                          <Form.Control.Feedback type="invalid" tooltip>
+                            {errors.username}
+                          </Form.Control.Feedback>
+                        </Form.Floating>
                       </Form.Group>
                       <Form.Group className="mb-4">
-                          <Form.Floating>
-                            <Form.Control
-                              placeholder="Пароль"
-                              id="password"
-                              name="password"
-                              type="password"
-                              onChange={handleChange}
-                              value={values.password}
-                              onBlur={handleBlur}
-                              autoComplete="current-password"
-                              isInvalid={touched.password && errors.password}
-                              required
-                            />
-                               <label
-                            htmlFor="password"
-                          >
-                            {t("text.password")}
-                          </label>
-                            <Form.Control.Feedback type="invalid" tooltip>
-                              {errors.password}
-                            </Form.Control.Feedback>
-                          </Form.Floating>
+                        <Form.Floating>
+                          <Form.Control
+                            placeholder="Пароль"
+                            id="password"
+                            name="password"
+                            type="password"
+                            onChange={handleChange}
+                            value={values.password}
+                            onBlur={handleBlur}
+                            autoComplete="current-password"
+                            isInvalid={touched.password && errors.password}
+                            required
+                          />
+                          <label htmlFor="password">{t("text.password")}</label>
+                          <Form.Control.Feedback type="invalid" tooltip>
+                            {errors.password}
+                          </Form.Control.Feedback>
+                        </Form.Floating>
                       </Form.Group>
-                      <Button
-                        type="submit"
-                        className="w-100 mb-3 "
-                      >
+                      <Button type="submit" className="w-100 mb-3 ">
                         {t("text.enter")}
                       </Button>
                     </Form>
