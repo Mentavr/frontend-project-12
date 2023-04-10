@@ -38,7 +38,7 @@ i18n
               delete: "Удалить",
               renameChannel: "Переименовать канал",
               createChanalSuccess: "Канал создан", 
-              removeChanalSuccess: "Канал удален",
+              removeChanalSuccess: "Канал удалён",
               renameChanalSuccess: "Канал переименован",
               pageNotFound: "Страница не найдена",
               dontEnter: "Но вы можете перейти ",
