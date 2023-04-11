@@ -10,10 +10,10 @@ const modalsMap = {
   renameChannelModal: RenameChannelModal,
 };
 
-const ModalOpen = () => {
+function ModalOpen() {
   const { openedModal, id } = useSelector((state) => state.modal);
   const Component = modalsMap[openedModal];
   return Component ? <Component idChannel={id} /> : null;
-};
+}
 
 export default ModalOpen;

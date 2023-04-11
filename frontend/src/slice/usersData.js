@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import routes from '../routes.js';
 import axios from 'axios';
+import routes from '../routes';
 
 export const userData = createAsyncThunk('users/usersData', async () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -27,10 +27,10 @@ const userSlice = createSlice({
     },
     removeChannel: (state, { payload }) => {
       const filterChannels = state.data.channels.filter(
-        (channel) => channel.id !== payload.id
+        (channel) => channel.id !== payload.id,
       );
       const filterMessage = state.data.messages.filter(
-        (messeg) => messeg.channelId !== payload.id
+        (messeg) => messeg.channelId !== payload.id,
       );
       return {
         ...state,
@@ -45,14 +45,10 @@ const userSlice = createSlice({
       state.data.messages.push(payload);
     },
     renameChannel: (state, { payload }) => {
-      const removeChannels = state.data.channels.map((channel) =>
-        channel.id !== payload.id ? channel : payload
-      );
+      const removeChannels = state.data.channels.map((channel) => (channel.id !== payload.id ? channel : payload));
       return { ...state, data: { ...state.data, channels: removeChannels } };
     },
-    setChannel: (state, { payload }) => {
-      return { ...state, data: { ...state.data, currentChannelId: payload } };
-    },
+    setChannel: (state, { payload }) => ({ ...state, data: { ...state.data, currentChannelId: payload } }),
   },
   extraReducers: (builder) => {
     builder
