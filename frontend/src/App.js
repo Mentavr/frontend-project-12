@@ -1,8 +1,6 @@
 import { Provider, ErrorBoundary } from "@rollbar/react";
+import "react-toastify/dist/ReactToastify.css";
 import React from "react";
-import FormAtorithation from "./FormAtorithation.js";
-import FormRegistration from "./FormRegistration.js";
-import Chat from "./Chat.js";
 import ErrorPage from "./ErrorPage.js";
 import {
   BrowserRouter as Router,
@@ -17,8 +15,10 @@ import { useSelector } from "react-redux";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import ModalWraper from "./ModalWraper";
+import FormAtorithation from "./FormAtorithation.js";
+import FormRegistration from "./FormRegistration.js";
+import Chat from "./Chat.js";
 
 const PrivateRoute = ({ children }) => {
   localStorage.getItem("userId");
@@ -36,11 +36,6 @@ const rollbarConfig = {
   accessToken: "c86ec99fa46146649a64bb0835a41ac4",
   environment: "testenv",
 };
-
-// function TestError() {
-//   const a = null;
-//   return a.hello();
-// }
 
 const App = () => {
   return (

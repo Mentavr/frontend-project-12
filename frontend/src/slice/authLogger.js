@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {authLogger: false}
+const initialState = { authLogger: false };
 
 const loggerSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     logIn: (state) => {
@@ -11,11 +11,11 @@ const loggerSlice = createSlice({
     },
     logOut: (state) => {
       state.authLogger = false;
-      localStorage.removeItem("userId")
+      localStorage.removeItem("userId");
     },
   },
-})
+});
 
-export const { logIn, logOut } =  loggerSlice.actions;
+export const { logIn, logOut } = loggerSlice.actions;
 
-export default  loggerSlice.reducer;
+export default loggerSlice.reducer;

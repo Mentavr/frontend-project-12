@@ -3,9 +3,9 @@ import routes from "../routes.js";
 import axios from "axios";
 
 export const userData = createAsyncThunk("users/usersData", async () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
+  const userId = JSON.parse(localStorage.getItem("userId"));
   const dataPath = routes.dataUser();
-  const {data} = await axios.get(dataPath, {
+  const { data } = await axios.get(dataPath, {
     headers: {
       Authorization: `Bearer ${userId.token}`,
     },
@@ -29,10 +29,17 @@ const userSlice = createSlice({
       const filterChannels = state.data.channels.filter(
         (channel) => channel.id !== payload.id
       );
-       const filterMessage = state.data.messages.filter(
+      const filterMessage = state.data.messages.filter(
         (messeg) => messeg.channelId !== payload.id
-       )
-      return { ...state, data: { ...state.data, channels: filterChannels, messages: filterMessage } };
+      );
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          channels: filterChannels,
+          messages: filterMessage,
+        },
+      };
     },
     addMessage: (state, { payload }) => {
       state.data.messages.push(payload);
@@ -65,7 +72,12 @@ const userSlice = createSlice({
   },
 });
 
-export const { addChannel, removeChannel, addMessage, renameChannel, setChannel } =
-  userSlice.actions;
+export const {
+  addChannel,
+  removeChannel,
+  addMessage,
+  renameChannel,
+  setChannel,
+} = userSlice.actions;
 
 export default userSlice.reducer;

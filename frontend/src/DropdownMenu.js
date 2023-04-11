@@ -3,23 +3,20 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useTranslation } from "react-i18next";
-import {
-  openModal, 
-} from "./slice/modalNewChannel";
+import { openModal } from "./slice/modalNewChannel";
 import { useDispatch } from "react-redux";
 
-
 const DropdownMenu = (props) => {
-  const dispatch = useDispatch()
-  const { t } = useTranslation()
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { activeButton, elem, choseChannelHandler } = props;
 
   const handlerOpenModal = (modalName, id) => {
-    dispatch(openModal({opened: modalName, idChannel: id}))
-  }
+    dispatch(openModal({ opened: modalName, idChannel: id }));
+  };
 
   return (
-    <Dropdown as={ButtonGroup}  className="d-flex">
+    <Dropdown as={ButtonGroup} className="d-flex">
       <Button
         type="button"
         className={`d-flex w-100 rounded-0 text-truncate btn  ${activeButton}`}
@@ -37,10 +34,16 @@ const DropdownMenu = (props) => {
         <span className="visually-hidden">Управление каналом</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        <Dropdown.Item href="#" onClick={() => handlerOpenModal('removeModalChannel', elem.id)}>
+        <Dropdown.Item
+          href="#"
+          onClick={() => handlerOpenModal("removeModalChannel", elem.id)}
+        >
           {t("text.remove")}
         </Dropdown.Item>
-        <Dropdown.Item href="#" onClick={() => handlerOpenModal('renameChannelModal', elem.id)}>
+        <Dropdown.Item
+          href="#"
+          onClick={() => handlerOpenModal("renameChannelModal", elem.id)}
+        >
           {t("text.rename")}
         </Dropdown.Item>
       </Dropdown.Menu>

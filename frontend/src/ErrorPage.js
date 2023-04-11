@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import errorPage from "./image/errorPage.svg"
+import errorPage from "./image/errorPage.svg";
 
 export default function ErrorPage() {
   const { t } = useTranslation();
@@ -15,11 +15,15 @@ export default function ErrorPage() {
             </div>
           </nav>
           <div className="text-center">
-            <img alt="Страница не найдена" className="img-fluid h-25" src={errorPage} />
+            <img
+              alt="Страница не найдена"
+              className="img-fluid h-25"
+              src={errorPage}
+            />
             <h1 className="h4 text-muted">{t("text.pageNotFound")}</h1>
             <p className="text-muted">
-            {t("text.dontEnter")}
-            <a href="/">{t("text.goToMainPage")}</a>
+              {t("text.dontEnter")}
+              <a href="/">{t("text.goToMainPage")}</a>
             </p>
           </div>
         </div>
