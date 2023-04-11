@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import routes from "../routes.js";
-import axios from "axios";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import routes from '../routes.js';
+import axios from 'axios';
 
-export const userData = createAsyncThunk("users/usersData", async () => {
-  const userId = JSON.parse(localStorage.getItem("userId"));
+export const userData = createAsyncThunk('users/usersData', async () => {
+  const userId = JSON.parse(localStorage.getItem('userId'));
   const dataPath = routes.dataUser();
   const { data } = await axios.get(dataPath, {
     headers: {
@@ -14,12 +14,12 @@ export const userData = createAsyncThunk("users/usersData", async () => {
 });
 
 const initialState = {
-  loadingStatus: "idle",
+  loadingStatus: 'idle',
   error: null,
   data: { channels: [], messages: [], currentChannelId: 1 },
 };
 const userSlice = createSlice({
-  name: "users",
+  name: 'users',
   initialState,
   reducers: {
     addChannel: (state, action) => {
@@ -57,16 +57,16 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(userData.pending, (state) => {
-        state.loadingStatus = "loading";
+        state.loadingStatus = 'loading';
         state.error = null;
       })
       .addCase(userData.fulfilled, (state, action) => {
         state.data = action.payload;
-        state.loadingStatus = "idle";
+        state.loadingStatus = 'idle';
         state.error = null;
       })
       .addCase(userData.rejected, (state, action) => {
-        state.loadingStatus = "failed";
+        state.loadingStatus = 'failed';
         state.error = action.error;
       });
   },

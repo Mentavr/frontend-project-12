@@ -1,8 +1,8 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import NewChannelModal from "./NewChannelModal";
-import RenameChannelModal from "./RenameChannelModal";
-import RemoveModalChannel from "./RemoveChannelModal";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import NewChannelModal from './NewChannelModal';
+import RenameChannelModal from './RenameChannelModal';
+import RemoveModalChannel from './RemoveChannelModal';
 
 const modalsMap = {
   newChannelModal: NewChannelModal,

@@ -1,4 +1,5 @@
 import { Provider, ErrorBoundary } from '@rollbar/react';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React from 'react';
 import ErrorPage from './ErrorPage.js';
@@ -14,7 +15,6 @@ import { Provider as ProviderReduce } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
-import { ToastContainer } from 'react-toastify';
 import ModalWraper from './ModalWraper';
 import FormAtorithation from './FormAtorithation.js';
 import FormRegistration from './FormRegistration.js';

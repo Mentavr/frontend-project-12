@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect } from 'react';
 
 const useAutoFocus = () => {
   const inputRef = useRef(null);

@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = { authLogger: false };
 
 const loggerSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     logIn: (state) => {
@@ -11,7 +11,7 @@ const loggerSlice = createSlice({
     },
     logOut: (state) => {
       state.authLogger = false;
-      localStorage.removeItem("userId");
+      localStorage.removeItem('userId');
     },
   },
 });
