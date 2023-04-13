@@ -12,7 +12,7 @@ import socket from './socket';
 import useAutoFocus from './hooks/useAutoFocus';
 import { closeModal } from './slice/modalNewChannel';
 
-function RenameChannel({ idChannel }) {
+const RenameChannel = ({ idChannel }) => {
   const renameFocus = useAutoFocus();
 
   const dispatch = useDispatch();
@@ -98,5 +98,5 @@ function RenameChannel({ idChannel }) {
       </Modal.Body>
     </Modal>
   );
-}
+};
 export default RenameChannel;

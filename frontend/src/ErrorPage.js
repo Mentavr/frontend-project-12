@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import errorPage from './image/errorPage.svg';
 
-export default function ErrorPage() {
+const ErrorPage = () => {
   const { t } = useTranslation();
   return (
     <div className="h-100">
@@ -31,4 +31,6 @@ export default function ErrorPage() {
       </div>
     </div>
   );
-}
+};
+
+export default ErrorPage;

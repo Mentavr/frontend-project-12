@@ -6,12 +6,10 @@ const loggerSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logIn: (state) => {
-      state.authLogger = true;
-    },
+    logIn: (state) => ({ ...state, authLogger: true }),
     logOut: (state) => {
-      state.authLogger = false;
       localStorage.removeItem('userId');
+      return { ...state, authLogger: false };
     },
   },
 });

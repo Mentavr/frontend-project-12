@@ -6,14 +6,17 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { openModal } from './slice/modalNewChannel';
 
-function DropdownMenu(props) {
+const DropdownMenu = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { activeButton, elem, choseChannelHandler } = props;
 
-  const handlerOpenModal = (modalName, id) => {
-    dispatch(openModal({ opened: modalName, idChannel: id }));
-  };
+  const handlerOpenModal = (modalName, id) => dispatch(openModal(
+    {
+      opened: modalName,
+      idChannel: id,
+    },
+  ));
 
   return (
     <Dropdown as={ButtonGroup} className="d-flex">
@@ -49,6 +52,6 @@ function DropdownMenu(props) {
       </Dropdown.Menu>
     </Dropdown>
   );
-}
+};
 
 export default DropdownMenu;

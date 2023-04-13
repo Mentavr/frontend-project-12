@@ -8,7 +8,7 @@ import socket from './socket';
 import { setChannel } from './slice/usersData';
 import { closeModal } from './slice/modalNewChannel';
 
-function RemoveChannel({ idChannel }) {
+const RemoveChannel = ({ idChannel }) => {
   const { t } = useTranslation();
   const { currentChannelId } = useSelector((state) => state.users.data);
   const dispatch = useDispatch();
@@ -51,5 +51,5 @@ function RemoveChannel({ idChannel }) {
       </Modal.Body>
     </Modal>
   );
-}
+};
 export default RemoveChannel;

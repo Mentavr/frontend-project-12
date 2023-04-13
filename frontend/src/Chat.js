@@ -17,7 +17,7 @@ import {
 import DropdownMenu from './DropdownMenu';
 import socket from './socket';
 
-function Chat() {
+const Chat = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -53,15 +53,9 @@ function Chat() {
     (message) => message.channelId === currentChannelId,
   );
 
-  const exitHandler = () => {
-    dispatch(logOut());
-  };
-  const choseChannelHandler = (e) => {
-    dispatch(setChannel(Number(e.target.id)));
-  };
-  const hendlerNewModalChannel = () => {
-    dispatch(openModal({ opened: 'newChannelModal', idChannel: null }));
-  };
+  const exitHandler = () => dispatch(logOut());
+  const choseChannelHandler = (e) => dispatch(setChannel(Number(e.target.id)));
+  const hendlerNewModalChannel = () => dispatch(openModal({ opened: 'newChannelModal', idChannel: null }));
 
   const formik = useFormik({
     initialValues: {
@@ -74,7 +68,7 @@ function Chat() {
         channelId: currentChannelId,
         username: userName,
       });
-      values.message = '';
+      formik.values.message = '';
     },
   });
   const { handleSubmit, values, handleChange } = formik;
@@ -232,5 +226,5 @@ function Chat() {
       </div>
     </div>
   );
-}
+};
 export default Chat;

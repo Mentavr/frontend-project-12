@@ -12,7 +12,7 @@ import filter from 'leo-profanity';
 import { closeModal } from './slice/modalNewChannel';
 import socket from './socket';
 
-function ModalChannel() {
+const ModalChannel = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const namesChannels = useSelector((state) => state.users.data.channels.map((channel) => channel.name));
@@ -92,6 +92,6 @@ function ModalChannel() {
       </Modal.Body>
     </Modal>
   );
-}
+};
 
 export default ModalChannel;

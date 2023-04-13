@@ -11,7 +11,7 @@ import {
 } from 'react-router-dom';
 import { Provider as ProviderReduce, useSelector } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import { store } from './slice/index';
+import store from './slice/index.js';
 import ErrorPage from './ErrorPage';
 import i18n from './i18n';
 import ModalWraper from './ModalWraper';
@@ -19,9 +19,7 @@ import FormAtorithation from './FormAtorithation';
 import FormRegistration from './FormRegistration';
 import Chat from './Chat';
 
-function PrivateRoute(props) {
-  const { children } = props;
-  localStorage.getItem('userId');
+const PrivateRoute = ({ children }) => {
   const logger = useSelector((state) => state.logger.authLogger);
   const location = useLocation();
 
@@ -30,41 +28,39 @@ function PrivateRoute(props) {
   ) : (
     <Navigate to="/login" state={{ from: location }} />
   );
-}
+};
 
 const rollbarConfig = {
   accessToken: 'c86ec99fa46146649a64bb0835a41ac4',
   environment: 'testenv',
 };
 
-function App() {
-  return (
-    <I18nextProvider i18n={i18n}>
-      <Provider config={rollbarConfig}>
-        <ErrorBoundary>
-          <ProviderReduce store={store}>
-            <ToastContainer />
-            <Router>
-              <Routes>
-                <Route
-                  path="/"
-                  element={(
-                    <PrivateRoute>
-                      <Chat />
-                    </PrivateRoute>
+const App = () => (
+  <I18nextProvider i18n={i18n}>
+    <Provider config={rollbarConfig}>
+      <ErrorBoundary>
+        <ProviderReduce store={store}>
+          <ToastContainer />
+          <Router>
+            <Routes>
+              <Route
+                path="/"
+                element={(
+                  <PrivateRoute>
+                    <Chat />
+                  </PrivateRoute>
                   )}
-                />
-                <Route path="/login" element={<FormAtorithation />} />
-                <Route path="/signup" element={<FormRegistration />} />
-                <Route path="*" element={<ErrorPage />} />
-              </Routes>
-            </Router>
-            <ModalWraper />
-          </ProviderReduce>
-        </ErrorBoundary>
-      </Provider>
-    </I18nextProvider>
-  );
-}
+              />
+              <Route path="/login" element={<FormAtorithation />} />
+              <Route path="/signup" element={<FormRegistration />} />
+              <Route path="*" element={<ErrorPage />} />
+            </Routes>
+          </Router>
+          <ModalWraper />
+        </ProviderReduce>
+      </ErrorBoundary>
+    </Provider>
+  </I18nextProvider>
+);
 
 export default App;

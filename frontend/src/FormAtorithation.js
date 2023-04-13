@@ -13,7 +13,7 @@ import routes from './routes';
 import img from './image/projectMen.jpeg';
 import { logIn, logOut } from './slice/authLogger';
 
-function FormAtorithation() {
+const FormAtorithation = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -150,5 +150,5 @@ function FormAtorithation() {
       </div>
     </div>
   );
-}
+};
 export default FormAtorithation;

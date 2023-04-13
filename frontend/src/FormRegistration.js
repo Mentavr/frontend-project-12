@@ -12,7 +12,7 @@ import img from './image/avatarRegistration.jpg';
 import routes from './routes';
 import { logIn, logOut } from './slice/authLogger';
 
-function FormRegistration() {
+const FormRegistration = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,15 +44,15 @@ function FormRegistration() {
       confirmPassword: '',
     },
     validationSchema: SignupSchema,
-    onSubmit: async () => {
+    onSubmit: async (values) => {
       try {
         const login = await axios.post(createUserPathApi, values);
         localStorage.setItem('userId', JSON.stringify(login.data));
         dispatch(logIn());
-        navigate('/');
+        return navigate('/');
       } catch (error) {
         errors.confirmPassword = t('errors.existUser');
-        dispatch(logOut());
+        return dispatch(logOut());
       }
     },
   });
@@ -162,5 +162,5 @@ function FormRegistration() {
       </div>
     </div>
   );
-}
+};
 export default FormRegistration;

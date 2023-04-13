@@ -5,8 +5,9 @@ const useAutoFocus = () => {
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus();
+      return inputRef.current.focus();
     }
+    return null;
   }, []);
 
   return inputRef;
