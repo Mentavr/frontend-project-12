@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import routes from './routes';
 import img from './image/projectMen.jpeg';
-import { logIn, logOut } from './slice/authLogger';
+import { logIn } from './slice/authLogger';
 
 const FormAtorithation = () => {
   const { t } = useTranslation();
@@ -29,6 +29,17 @@ const FormAtorithation = () => {
     password: Yup.string().required(t('errors.required')),
   });
 
+  const errorsNet = (numberError) => {
+    switch (numberError) {
+      case 401:
+        formik.errors.password = t('errors.enterNickPassword');
+        break;
+      case 0:
+        return toast.error(t('errors.errorConnect'));
+      default:
+        return new Error('что-то пошло не так');
+    }
+  };
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -45,23 +56,12 @@ const FormAtorithation = () => {
         const numberError = request.status;
         errorsNet(numberError);
       }
-      // dispatch(logOut());
     },
   });
+
   const {
     errors, touched, values, handleChange, handleBlur, handleSubmit,
   } = formik;
-
-  const errorsNet = (numberError) => {
-    switch (numberError) {
-      case 401:
-        formik.errors.password = t('errors.enterNickPassword');
-      case 0:
-        return toast.error(t('errors.errorConnect'));
-      default:
-        return new Error('что-то пошло не так');
-    }
-  };
 
   return (
     <div className="h-100">
