@@ -22,28 +22,21 @@ const Chat = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    const webSoket = socket
     filter.add(filter.getDictionary('en'));
     filter.add(filter.getDictionary('ru'));
     dispatch(userData());
-    webSoket.on('removeChannel', (payload) => {
-      dispatch(removeChannel(payload));
-    });
+    socket.on('removeChannel', (payload) => dispatch(removeChannel(payload)));
 
-    webSoket.on('newChannel', (payload) => {
+    socket.on('newChannel', (payload) => {
       dispatch(addChannel(payload));
-      dispatch(setChannel(payload.id));
+      return dispatch(setChannel(payload.id));
     });
 
-    webSoket.on('newMessage', (payload) => {
-      dispatch(addMessage(payload));
-    });
+    socket.on('newMessage', (payload) => dispatch(addMessage(payload)));
 
-    webSoket.on('renameChannel', (payload) => {
-      dispatch(renameChannel(payload));
-    });
+    socket.on('renameChannel', (payload) => dispatch(renameChannel(payload)));
 
-    return () => webSoket.removeAllListeners();
+    return () => socket.removeAllListeners();
   }, []);
 
   const userName = JSON.parse(localStorage.userId).username;
