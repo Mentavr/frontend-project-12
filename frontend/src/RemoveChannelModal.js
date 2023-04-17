@@ -15,12 +15,14 @@ const RemoveChannel = ({ idChannel }) => {
   const handleClose = () => dispatch(closeModal());
   const handalRemove = (idNumber) => {
     socket.emit('removeChannel', { id: idNumber });
-    currentChannelId === idNumber
-      ? dispatch(setChannel(1))
-      : dispatch(setChannel(currentChannelId));
     toast.success(t('text.removeChanalSuccess'));
     dispatch(closeModal());
     handleClose();
+
+    if (currentChannelId === idNumber) {
+      return dispatch(setChannel(1));
+    }
+    return dispatch(setChannel(currentChannelId));
   };
   return (
     <Modal

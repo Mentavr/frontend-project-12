@@ -19,7 +19,8 @@ const RenameChannel = ({ idChannel }) => {
   const { t } = useTranslation();
   const handleClose = () => dispatch(closeModal());
 
-  const namesChannels = useSelector((state) => state.users.data.channels.map((channel) => channel.name));
+  const namesChannels = useSelector((state) => state.users.data.channels
+    .map((channel) => channel.name));
 
   const SignupSchema = Yup.object({
     renameChannel: Yup.string()

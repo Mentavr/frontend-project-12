@@ -52,6 +52,9 @@ const Chat = () => {
   const countMassage = data.messages.filter(
     (message) => message.channelId === currentChannelId,
   );
+  const filterMesseges = data.messages.filter(
+    (message) => message.channelId === currentChannelId,
+  );
 
   const exitHandler = () => dispatch(logOut());
   const choseChannelHandler = (e) => dispatch(setChannel(Number(e.target.id)));
@@ -166,17 +169,13 @@ const Chat = () => {
                     id="messages-box"
                     className="chat-messages overflow-auto px-5"
                   >
-                    {data.messages
-                      .filter(
-                        (message) => message.channelId === currentChannelId,
-                      )
-                      .map((message) => (
-                        <div className="text-break mb-2">
-                          <b>{message.username}</b>
-                          :
-                          {message.body}
-                        </div>
-                      ))}
+                    {filterMesseges.map((message) => (
+                      <div key={message.id} className="text-break mb-2">
+                        <b>{message.username}</b>
+                        :
+                        {message.body}
+                      </div>
+                    ))}
                   </div>
                   <div className="mt-auto px-5 py-3">
                     <form

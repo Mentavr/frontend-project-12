@@ -15,7 +15,13 @@ import socket from './socket';
 const ModalChannel = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const namesChannels = useSelector((state) => state.users.data.channels.map((channel) => channel.name));
+  const namesChannels = useSelector((state) => state.users.data.channels.map(
+    (channel) => channel.name,
+  ));
+
+  const handleClose = () => {
+    dispatch(closeModal());
+  };
 
   const SignupSchema = Yup.object({
     newChannel: Yup.string()
@@ -35,16 +41,13 @@ const ModalChannel = () => {
       socket.emit('newChannel', { name: filterMessege });
       toast.success(t('text.createChanalSuccess'));
       handleClose();
-      values.newChannel = '';
+      formik.values.newChannel = '';
     },
   });
+
   const {
     handleSubmit, handleChange, errors, values, touched,
   } = formik;
-
-  const handleClose = () => {
-    dispatch(closeModal());
-  };
 
   return (
     <Modal
