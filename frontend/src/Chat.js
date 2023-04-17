@@ -20,11 +20,12 @@ import socket from './socket';
 const Chat = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const usersData = () => dispatch(userData());
 
   useEffect(() => {
     filter.add(filter.getDictionary('en'));
     filter.add(filter.getDictionary('ru'));
-
+    usersData();
     socket.on('removeChannel', (payload) => {
       dispatch(removeChannel(payload));
     });
@@ -38,7 +39,6 @@ const Chat = () => {
     socket.on('renameChannel', (payload) => {
       dispatch(renameChannel(payload));
     });
-    dispatch(userData());
     return () => {
       socket.removeAllListeners();
     };

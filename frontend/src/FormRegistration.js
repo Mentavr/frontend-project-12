@@ -50,8 +50,8 @@ const FormRegistration = () => {
         localStorage.setItem('userId', JSON.stringify(login.data));
         dispatch(logIn());
         return navigate('/');
-      } catch (error) {
-        errors.confirmPassword = t('errors.existUser');
+      } catch {
+        formik.errors.confirmPassword = t('errors.existUser');
         return dispatch(logOut());
       }
     },

@@ -43,23 +43,25 @@ const FormAtorithation = () => {
         navigate('/');
       } catch ({ request }) {
         const numberError = request.status;
-        switch (numberError) {
-          case 401:
-            errors.password = t('errors.enterNickPassword');
-            break;
-          case 0:
-            toast.error(t('errors.errorConnect'));
-            break;
-          default:
-            new Error('что-то пошло не так');
-        }
-        dispatch(logOut());
+        errorsNet(numberError);
       }
+      // dispatch(logOut());
     },
   });
   const {
     errors, touched, values, handleChange, handleBlur, handleSubmit,
   } = formik;
+
+  const errorsNet = (numberError) => {
+    switch (numberError) {
+      case 401:
+        formik.errors.password = t('errors.enterNickPassword');
+      case 0:
+        return toast.error(t('errors.errorConnect'));
+      default:
+        return new Error('что-то пошло не так');
+    }
+  };
 
   return (
     <div className="h-100">
