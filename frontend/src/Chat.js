@@ -37,7 +37,7 @@ const Chat = () => {
     socket.on('renameChannel', (payload) => dispatch(renameChannel(payload)));
 
     return () => socket.removeAllListeners();
-  }, []);
+  }, [dispatch]);
 
   const userName = JSON.parse(localStorage.userId).username;
   const data = useSelector((state) => state.users.data);
