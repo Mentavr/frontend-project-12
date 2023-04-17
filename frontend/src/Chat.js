@@ -20,28 +20,30 @@ import socket from './socket';
 const Chat = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const usersData = () => dispatch(userData());
 
   useEffect(() => {
+    const webSoket = socket
     filter.add(filter.getDictionary('en'));
     filter.add(filter.getDictionary('ru'));
-    usersData();
-    socket.on('removeChannel', (payload) => {
+    dispatch(userData());
+    webSoket.on('removeChannel', (payload) => {
       dispatch(removeChannel(payload));
     });
-    socket.on('newChannel', (payload) => {
+
+    webSoket.on('newChannel', (payload) => {
       dispatch(addChannel(payload));
       dispatch(setChannel(payload.id));
     });
-    socket.on('newMessage', (payload) => {
+
+    webSoket.on('newMessage', (payload) => {
       dispatch(addMessage(payload));
     });
-    socket.on('renameChannel', (payload) => {
+
+    webSoket.on('renameChannel', (payload) => {
       dispatch(renameChannel(payload));
     });
-    return () => {
-      socket.removeAllListeners();
-    };
+
+    return () => webSoket.removeAllListeners();
   }, []);
 
   const userName = JSON.parse(localStorage.userId).username;
