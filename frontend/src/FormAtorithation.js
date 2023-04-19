@@ -33,10 +33,9 @@ const FormAtorithation = () => {
     if (numberError === 401) {
       const { errors } = formik;
       errors.password = t('errors.enterNickPassword');
-      return;
     }
     if (numberError === 0) {
-      return toast.error(t('errors.errorConnect'));
+      toast.error(t('errors.errorConnect'));
     }
   };
 
