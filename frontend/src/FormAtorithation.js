@@ -29,8 +29,9 @@ const FormAtorithation = () => {
     password: Yup.string().required(t('errors.required')),
   });
 
-  const errorsNet = (numberError, errors) => {
+  const errorsNet = (numberError, formik) => {
     if (numberError === 401) {
+      const { errors } = formik;
       errors.password = t('errors.enterNickPassword');
       return;
     }
@@ -38,6 +39,7 @@ const FormAtorithation = () => {
       return toast.error(t('errors.errorConnect'));
     }
   };
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -52,7 +54,7 @@ const FormAtorithation = () => {
         navigate('/');
       } catch ({ request }) {
         const numberError = request.status;
-        errorsNet(numberError, errors);
+        errorsNet(numberError, formik);
       }
     },
   });
