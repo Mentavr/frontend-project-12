@@ -40,6 +40,7 @@ const RenameChannel = ({ idChannel }) => {
         id: idChannel,
         name: value.renameChannel,
       });
+
       toast.success(t('text.renameChanalSuccess'));
       handleClose();
     },
