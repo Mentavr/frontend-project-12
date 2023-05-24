@@ -34,7 +34,7 @@ const SocketOn = ({ children }) => {
       return dispatch(renameChannel(payload));
     });
     return () => socket.removeAllListeners();
-  }, [dispatch]);
+  }, [dispatch, t, socket]);
 
   return children;
 };

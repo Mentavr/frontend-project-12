@@ -19,7 +19,6 @@ const ModalChannel = () => {
   const namesChannels = useSelector((state) => state.channels.data.channels.map(
     (channel) => channel.name,
   ));
-  const { shouldRedirectToNewChannel } = useSelector((state) => state.channels.data);
 
   const handleClose = () => dispatch(closeModal());
 
@@ -40,9 +39,7 @@ const ModalChannel = () => {
       const filterMessege = filter.clean(newChannel);
       socket.emit('newChannel', { name: filterMessege });
       handleClose();
-      console.log(shouldRedirectToNewChannel);
-      dispatch(redirectNewChannel(true));
-      console.log(shouldRedirectToNewChannel),
+      dispatch(redirectNewChannel(true)); 
       formik.values.newChannel = '';
     },
   });

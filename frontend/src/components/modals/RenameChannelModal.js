@@ -44,7 +44,7 @@ const RenameChannel = ({ idChannel }) => {
   });
 
   const {
-    handleSubmit, handleChange, errors, values, touched, isSubmitting
+    handleSubmit, handleChange, errors, values, touched, isSubmitting,
   } = formik;
   return (
     <Modal
@@ -90,9 +90,9 @@ const RenameChannel = ({ idChannel }) => {
             >
               {t('text.cancel')}
             </Button>
-            <Button 
-            type="submit" 
-            variant="primary"
+            <Button
+              type="submit"
+              variant="primary"
             >
               {t('text.sendForm')}
             </Button>

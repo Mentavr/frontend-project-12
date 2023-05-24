@@ -56,7 +56,7 @@ const FormRegistration = () => {
     },
   });
   const {
-    errors, touched, values, handleChange, handleBlur, handleSubmit, isSubmitting
+    errors, touched, values, handleChange, handleBlur, handleSubmit, isSubmitting,
   } = formik;
 
   return (
