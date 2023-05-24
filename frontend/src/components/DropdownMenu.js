@@ -4,7 +4,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { openModal } from './slice/modalNewChannel';
+import { openModal } from '../slice/modalSwitch';
 
 const DropdownMenu = (props) => {
   const dispatch = useDispatch();
@@ -34,7 +34,7 @@ const DropdownMenu = (props) => {
         id="dropdown-basic"
         className={`flex-grow-0 dropdown-toggle dropdown-toggle-split btn btn-secondary ${activeButton}`}
       >
-        <span className="visually-hidden">Управление каналом</span>
+        <span className="visually-hidden">{t('text.сhannelСontrol')}</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <Dropdown.Item

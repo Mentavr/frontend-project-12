@@ -1,23 +1,22 @@
 import React, { useRef, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import img from './image/avatarRegistration.jpg';
-import routes from './routes';
-import { logIn, logOut } from './slice/authLogger';
+import img from '../image/avatarRegistration.jpg';
+import routes from '../routes';
+import useAuth from '../hooks/useAuth';
 
 const FormRegistration = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const createUserPathApi = routes.createUser();
+  const autContext = useAuth();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -48,23 +47,23 @@ const FormRegistration = () => {
       try {
         const login = await axios.post(createUserPathApi, values);
         localStorage.setItem('userId', JSON.stringify(login.data));
-        dispatch(logIn());
+        autContext.logIn();
         return navigate('/');
       } catch {
         formik.errors.confirmPassword = t('errors.existUser');
-        return dispatch(logOut());
+        return autContext.logOut();
       }
     },
   });
   const {
-    errors, touched, values, handleChange, handleBlur, handleSubmit,
+    errors, touched, values, handleChange, handleBlur, handleSubmit, isSubmitting
   } = formik;
 
   return (
     <div className="d-flex flex-column h-100">
       <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
         <div className="container">
-          <a className="navbar-brand" href="/">
+          <a className="navbar-brand" href={routes.atorithationPath}>
             {t('text.hexletHeader')}
           </a>
         </div>
@@ -82,7 +81,7 @@ const FormRegistration = () => {
                   <Form.Group className="mb-3">
                     <Form.Floating>
                       <Form.Control
-                        placeholder="Имя пользователя"
+                        placeholder={t('text.userNameRegistration')}
                         ref={inputRef}
                         id="username"
                         name="username"
@@ -106,7 +105,7 @@ const FormRegistration = () => {
                   <Form.Group className="mb-4">
                     <Form.Floating>
                       <Form.Control
-                        placeholder="Пароль"
+                        placeholder={t('text.password')}
                         id="password"
                         name="password"
                         type="password"
@@ -126,7 +125,7 @@ const FormRegistration = () => {
                   <Form.Group as={Col} className="mb-4">
                     <Form.Floating>
                       <Form.Control
-                        placeholder="Подтвердить пароль"
+                        placeholder={t('text.confirmPassword')}
                         id="confirmPassword"
                         name="confirmPassword"
                         type="password"
@@ -151,6 +150,7 @@ const FormRegistration = () => {
                     type="submit"
                     variant="outline-primary"
                     className="w-100 mb-3"
+                    disabled={isSubmitting}
                   >
                     {t('text.register')}
                   </Button>

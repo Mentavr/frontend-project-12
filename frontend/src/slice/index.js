@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import loggerSlice from './authLogger';
-import userSlice from './usersData';
-import modalSlice from './modalNewChannel';
+import modalSlice from './modalSwitch';
+import messagesSlice from './messagesSlice'; 
+import channelsSlice from './channelsSlice';
 
 const store = configureStore({
   reducer: {
-    logger: loggerSlice,
-    users: userSlice,
     modal: modalSlice,
+    channels: channelsSlice,
+    messages: messagesSlice,
   },
 });
 

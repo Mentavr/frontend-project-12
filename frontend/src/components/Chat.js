@@ -1,57 +1,70 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import Button from 'react-bootstrap/Button';
 import filter from 'leo-profanity';
-import { logOut } from './slice/authLogger';
-import { openModal } from './slice/modalNewChannel';
-import {
-  addChannel,
-  removeChannel,
-  addMessage,
-  renameChannel,
-  setChannel,
-  userData,
-} from './slice/usersData';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { openModal } from '../slice/modalSwitch';
+import { setChannel, addInitialChannels } from '../slice/channelsSlice';
+import { addInitialMessages } from '../slice/messagesSlice';
 import DropdownMenu from './DropdownMenu';
-import socket from './socket';
+import SocketContext from '../context/socketContext';
+import useAuth from '../hooks/useAuth';
+import routes from '../routes';
+import Messages from './Messages';
 
 const Chat = () => {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const [netError, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    filter.add(filter.getDictionary('en'));
-    filter.add(filter.getDictionary('ru'));
-    dispatch(userData());
-    socket.on('removeChannel', (payload) => dispatch(removeChannel(payload)));
-
-    socket.on('newChannel', (payload) => {
-      dispatch(addChannel(payload));
-      return dispatch(setChannel(payload.id));
-    });
-
-    socket.on('newMessage', (payload) => dispatch(addMessage(payload)));
-
-    socket.on('renameChannel', (payload) => dispatch(renameChannel(payload)));
-
-    return () => socket.removeAllListeners();
+    const userData = async () => {
+      try {
+        const userId = JSON.parse(localStorage.getItem('userId'));
+        const dataPath = routes.dataUser();
+        const { data } = await axios.get(dataPath, {
+          headers: {
+            Authorization: `Bearer ${userId.token}`,
+          },
+        });
+        dispatch(addInitialMessages(data.messages));
+        dispatch(addInitialChannels(data.channels));
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+      }
+    };
+    userData();
   }, [dispatch]);
 
+  const autContext = useAuth();
+  const socket = useContext(SocketContext);
+  const { t } = useTranslation();
   const userName = JSON.parse(localStorage.userId).username;
-  const data = useSelector((state) => state.users.data);
-  const { currentChannelId } = useSelector((state) => state.users.data);
-  const currentChanel = data.channels.find((channel) => channel.id === currentChannelId)
+  const dataMessages = useSelector((state) => state.messages.data);
+  const dataChanells = useSelector((state) => state.channels.data);
+
+  const { currentChannelId } = useSelector((state) => state.channels.data);
+  const currentChanel = dataChanells.channels.find((channel) => channel.id === currentChannelId)
     || 'general';
-  const countMassage = data.messages.filter(
-    (message) => message.channelId === currentChannelId,
-  );
-  const filterMesseges = data.messages.filter(
+  const filterMesseges = dataMessages.messages.filter(
     (message) => message.channelId === currentChannelId,
   );
 
-  const exitHandler = () => dispatch(logOut());
+  const renderingMessages = () => {
+    const lastMessage = filterMesseges[filterMesseges.length - 1];
+    return filterMesseges.map((message) => {
+      const isLast = lastMessage.id === message.id;
+      return (
+        <Messages key={message.id} isLast={isLast} messageProps={message} />
+      );
+    });
+  };
+
+  const exitHandler = () => autContext.logOut();
   const choseChannelHandler = (e) => dispatch(setChannel(Number(e.target.id)));
   const hendlerNewModalChannel = () => dispatch(openModal({ opened: 'newChannelModal', idChannel: null }));
 
@@ -70,6 +83,42 @@ const Chat = () => {
     },
   });
   const { handleSubmit, values, handleChange } = formik;
+
+  if (netError) {
+    toast.error(t('errors.errorConnect'));
+  }
+
+  if (loading) {
+    return (
+      <div className="h-100">
+        <div className="h-100">
+          <div className="d-flex flex-column h-100">
+            <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
+              <div className="container">
+                <a className="navbar-brand" href={routes.chatPath}>
+                  {t('text.hexletHeader')}
+                </a>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => exitHandler()}
+                >
+                  {t('text.exit')}
+                </button>
+              </div>
+            </nav>
+            <div className="h-100 d-flex justify-content-center align-items-center">
+              <div role="status" className="spinner-border text-primary">
+                <span className="visually-hidden">
+                  {t('text.loading')}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-100">
@@ -113,7 +162,7 @@ const Chat = () => {
                   </Button>
                 </div>
                 <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
-                  {data.channels.map((elem) => {
+                  {dataChanells.channels.map((elem) => {
                     const activeButton = elem.id === currentChannelId
                       ? 'btn-secondary'
                       : 'btn-light';
@@ -156,7 +205,7 @@ const Chat = () => {
                     <span className="text-muted">
                       <Trans
                         i18nKey="icu_and_trans"
-                        values={{ count: countMassage.length }}
+                        values={{ count: filterMesseges.length }}
                       />
                     </span>
                   </div>
@@ -164,13 +213,7 @@ const Chat = () => {
                     id="messages-box"
                     className="chat-messages overflow-auto px-5"
                   >
-                    {filterMesseges.map((message) => (
-                      <div key={message.id} className="text-break mb-2">
-                        <b>{message.username}</b>
-                        :
-                        {message.body}
-                      </div>
-                    ))}
+                    {renderingMessages()}
                   </div>
                   <div className="mt-auto px-5 py-3">
                     <form
@@ -180,13 +223,13 @@ const Chat = () => {
                       <div className="input-group has-validation">
                         <input
                           className="border-0 p-0 ps-2 form-control"
-                          aria-label="Новое сообщение"
+                          aria-label={t('text.newMessage')}
                           id="message"
                           name="message"
                           type="text"
                           onChange={handleChange}
                           value={values.message}
-                          placeholder="Введите сообщение..."
+                          placeholder={t('text.enterMessage')}
                         />
                         <button
                           type="submit"

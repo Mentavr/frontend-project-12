@@ -1,25 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import socket from './socket';
-import useAutoFocus from './hooks/useAutoFocus';
-import { closeModal } from './slice/modalNewChannel';
+import useAutoFocus from '../../hooks/useAutoFocus';
+import { closeModal } from '../../slice/modalSwitch';
+import SocketContext from '../../context/socketContext';
 
 const RenameChannel = ({ idChannel }) => {
   const renameFocus = useAutoFocus();
-
+  const socket = useContext(SocketContext);
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const handleClose = () => dispatch(closeModal());
 
-  const namesChannels = useSelector((state) => state.users.data.channels
+  const namesChannels = useSelector((state) => state.channels.data.channels
     .map((channel) => channel.name));
 
   const SignupSchema = Yup.object({
@@ -40,14 +39,12 @@ const RenameChannel = ({ idChannel }) => {
         id: idChannel,
         name: value.renameChannel,
       });
-
-      toast.success(t('text.renameChanalSuccess'));
       handleClose();
     },
   });
 
   const {
-    handleSubmit, handleChange, errors, values, touched,
+    handleSubmit, handleChange, errors, values, touched, isSubmitting
   } = formik;
   return (
     <Modal
@@ -89,10 +86,14 @@ const RenameChannel = ({ idChannel }) => {
               variant="secondary"
               onClick={handleClose}
               className="me-2 btn btn-secondary"
+              disabled={isSubmitting}
             >
               {t('text.cancel')}
             </Button>
-            <Button type="submit" variant="primary">
+            <Button 
+            type="submit" 
+            variant="primary"
+            >
               {t('text.sendForm')}
             </Button>
           </Form.Group>

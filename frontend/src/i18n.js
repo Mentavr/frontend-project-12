@@ -15,6 +15,9 @@ i18n
           icu_and_trans:
             '{count, plural, one {# Сообщение} few {# Сообщения} many {# Сообщений} other {# Сообщений}}',
           text: {
+            сhannelСontrol: 'Управление каналом',
+            enterMessage: 'Введите сообщение...',
+            newMessage: 'Новое сообщение',
             userNameRegistration: 'Имя пользователя',
             chanel: 'Каналы',
             enter: 'Войти',
@@ -43,6 +46,7 @@ i18n
             pageNotFound: 'Страница не найдена',
             dontEnter: 'Но вы можете перейти ',
             goToMainPage: 'на главную страницу',
+            loading: 'Загрузка...',
           },
           errors: {
             passwordNotMatch: 'Пароли должны совпадать',

@@ -17,6 +17,7 @@
     "intl-messageformat": "^10.3.3",
     "leo-profanity": "^1.7.0",
     "lodash": "^4.17.21",
+    "mdb-react-ui-kit": "^6.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-bootstrap-formik": "^1.7.2",
@@ -52,7 +53,7 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^8.38.0",
+    "eslint": "^8.40.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-functional": "^5.0.7",
     "eslint-plugin-import": "^2.27.5",

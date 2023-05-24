@@ -2,20 +2,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
-import routes from './routes';
-import img from './image/projectMen.jpeg';
-import { logIn } from './slice/authLogger';
+import routes from '../routes';
+import img from '../image/projectMen.jpeg';
+import useAuth from '../hooks/useAuth';
 
-const FormAtorithation = () => {
+const Login = () => {
+  
+  const autContext = useAuth();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const loginPathApi = routes.userLogin();
@@ -49,7 +49,7 @@ const FormAtorithation = () => {
       try {
         const login = await axios.post(loginPathApi, formik.values);
         localStorage.setItem('userId', JSON.stringify(login.data));
-        dispatch(logIn());
+        autContext.logIn();
         navigate('/');
       } catch ({ request }) {
         const numberError = request.status;
@@ -59,7 +59,7 @@ const FormAtorithation = () => {
   });
 
   const {
-    errors, touched, values, handleChange, handleBlur, handleSubmit,
+    errors, touched, values, handleChange, handleBlur, handleSubmit, isSubmitting,
   } = formik;
 
   return (
@@ -68,7 +68,7 @@ const FormAtorithation = () => {
         <div className="d-flex flex-column h-100">
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
-              <a className="navbar-brand" href="/">
+              <a className="navbar-brand" href={routes.atorithationPath}>
                 {t('text.hexletHeader')}
               </a>
             </div>
@@ -91,7 +91,7 @@ const FormAtorithation = () => {
                         <Form.Floating>
                           <Form.Control
                             className="mb-3"
-                            placeholder="Ваш ник"
+                            placeholder={t('text.userName')}
                             ref={inputRef}
                             id="username"
                             name="username"
@@ -112,7 +112,7 @@ const FormAtorithation = () => {
                       <Form.Group className="mb-4">
                         <Form.Floating>
                           <Form.Control
-                            placeholder="Пароль"
+                            placeholder={t('text.password')}
                             id="password"
                             name="password"
                             type="password"
@@ -129,7 +129,11 @@ const FormAtorithation = () => {
                           </Form.Control.Feedback>
                         </Form.Floating>
                       </Form.Group>
-                      <Button type="submit" className="w-100 mb-3 ">
+                      <Button 
+                      type="submit" 
+                      className="w-100 mb-3"
+                      disabled={isSubmitting}
+                      >
                         {t('text.enter')}
                       </Button>
                     </Form>
@@ -152,4 +156,4 @@ const FormAtorithation = () => {
     </div>
   );
 };
-export default FormAtorithation;
+export default Login;

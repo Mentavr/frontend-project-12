@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -7,21 +7,21 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import filter from 'leo-profanity';
-import { closeModal } from './slice/modalNewChannel';
-import socket from './socket';
+import { closeModal } from '../../slice/modalSwitch';
+import SocketContext from '../../context/socketContext';
+import { redirectNewChannel } from '../../slice/channelsSlice';
 
 const ModalChannel = () => {
+  const socket = useContext(SocketContext);
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const namesChannels = useSelector((state) => state.users.data.channels.map(
+  const namesChannels = useSelector((state) => state.channels.data.channels.map(
     (channel) => channel.name,
   ));
+  const { shouldRedirectToNewChannel } = useSelector((state) => state.channels.data);
 
-  const handleClose = () => {
-    dispatch(closeModal());
-  };
+  const handleClose = () => dispatch(closeModal());
 
   const SignupSchema = Yup.object({
     newChannel: Yup.string()
@@ -39,14 +39,15 @@ const ModalChannel = () => {
     onSubmit: ({ newChannel }) => {
       const filterMessege = filter.clean(newChannel);
       socket.emit('newChannel', { name: filterMessege });
-      toast.success(t('text.createChanalSuccess'));
       handleClose();
+      console.log(shouldRedirectToNewChannel);
+      dispatch(redirectNewChannel(true));
+      console.log(shouldRedirectToNewChannel),
       formik.values.newChannel = '';
     },
   });
-
   const {
-    handleSubmit, handleChange, errors, values, touched,
+    handleSubmit, handleChange, errors, values, touched, isSubmitting,
   } = formik;
 
   return (
@@ -87,7 +88,11 @@ const ModalChannel = () => {
             <Button className="me-2 btn-secondary" onClick={handleClose}>
               {t('text.cancel')}
             </Button>
-            <Button type="submit" className="btn-primary">
+            <Button
+              type="submit"
+              className="btn-primary"
+              disabled={isSubmitting}
+            >
               {t('text.sendForm')}
             </Button>
           </Form.Group>

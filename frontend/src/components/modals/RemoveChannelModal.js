@@ -1,28 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import socket from './socket';
-import { setChannel } from './slice/usersData';
-import { closeModal } from './slice/modalNewChannel';
+
+import { closeModal } from '../../slice/modalSwitch';
+import SocketContext from '../../context/socketContext';
 
 const RemoveChannel = ({ idChannel }) => {
+  const socket = useContext(SocketContext);
   const { t } = useTranslation();
-  const { currentChannelId } = useSelector((state) => state.users.data);
   const dispatch = useDispatch();
   const handleClose = () => dispatch(closeModal());
   const handalRemove = (idNumber) => {
     socket.emit('removeChannel', { id: idNumber });
-    toast.success(t('text.removeChanalSuccess'));
     dispatch(closeModal());
     handleClose();
-
-    if (currentChannelId === idNumber) {
-      return dispatch(setChannel(1));
-    }
-    return dispatch(setChannel(currentChannelId));
   };
   return (
     <Modal
