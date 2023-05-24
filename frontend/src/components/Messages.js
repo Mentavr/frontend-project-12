@@ -2,10 +2,10 @@ import React, { useRef, useEffect } from 'react';
 
 const Messages = (props) => {
   const refScroll = useRef(null);
+  const { isLast, messageProps } = props;
   useEffect(() => {
     isLast ? refScroll.current.scrollIntoView() : null;
-  }, []);
-  const { isLast, messageProps } = props;
+  }, [refScroll]);
   const lastMessage = () => (
     <div
       className="text-break mb-2"

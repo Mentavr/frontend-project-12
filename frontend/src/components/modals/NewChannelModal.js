@@ -39,7 +39,7 @@ const ModalChannel = () => {
       const filterMessege = filter.clean(newChannel);
       socket.emit('newChannel', { name: filterMessege });
       handleClose();
-      dispatch(redirectNewChannel(true)); 
+      dispatch(redirectNewChannel(true));
       formik.values.newChannel = '';
     },
   });

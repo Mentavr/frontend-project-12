@@ -13,7 +13,6 @@ import img from '../image/projectMen.jpeg';
 import useAuth from '../hooks/useAuth';
 
 const Login = () => {
-  
   const autContext = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -129,10 +128,10 @@ const Login = () => {
                           </Form.Control.Feedback>
                         </Form.Floating>
                       </Form.Group>
-                      <Button 
-                      type="submit" 
-                      className="w-100 mb-3"
-                      disabled={isSubmitting}
+                      <Button
+                        type="submit"
+                        className="w-100 mb-3"
+                        disabled={isSubmitting}
                       >
                         {t('text.enter')}
                       </Button>
