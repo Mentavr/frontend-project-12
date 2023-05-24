@@ -31,7 +31,7 @@ const {
 const socket = io();
 
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
