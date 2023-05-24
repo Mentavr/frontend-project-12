@@ -4,7 +4,9 @@ const Messages = (props) => {
   const refScroll = useRef(null);
   const { isLast, messageProps } = props;
   useEffect(() => {
-    isLast ? refScroll.current.scrollIntoView() : null;
+    if (isLast) {
+      refScroll.current.scrollIntoView();
+    }
   }, [refScroll]);
   const lastMessage = () => (
     <div

@@ -43,10 +43,7 @@ const channelsSlice = createSlice({
         (channel) => channel.id !== payload.id,
       );
       if (state.data.currentChannelId === payload.id) {
-        state = {
-          ...state,
-          data: { ...state.data, currentChannelId: defaultCurrent },
-        };
+        state.currentChannelId = defaultCurrent;
       }
       return {
         ...state,
