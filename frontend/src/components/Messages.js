@@ -7,7 +7,7 @@ const Messages = (props) => {
     if (isLast) {
       refScroll.current.scrollIntoView();
     }
-  }, [refScroll]);
+  }, []);
   const lastMessage = () => (
     <div
       className="text-break mb-2"
