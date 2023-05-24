@@ -42,6 +42,7 @@ const channelsSlice = createSlice({
       const filterChannels = state.data.channels.filter(
         (channel) => channel.id !== payload.id,
       );
+      // eslint-disable-next-line functional/no-conditional-statements
       if (state.data.currentChannelId === payload.id) {
         state.currentChannelId = defaultCurrent
       }

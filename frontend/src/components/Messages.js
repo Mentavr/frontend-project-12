@@ -5,7 +5,7 @@ const Messages = (props) => {
   const { isLast, messageProps } = props;
   useEffect(() => {
     if (isLast) refScroll.current.scrollIntoView();
-  }, []);
+  }, [isLast]);
   const lastMessage = () => (
     <div
       className="text-break mb-2"
