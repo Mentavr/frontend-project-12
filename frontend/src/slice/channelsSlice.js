@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-expression-statements */
 import { createSlice } from '@reduxjs/toolkit';
 
 const defaultCurrent = 1;
@@ -43,6 +44,7 @@ const channelsSlice = createSlice({
         (channel) => channel.id !== payload.id,
       );
       if (state.data.currentChannelId === payload.id) {
+        // eslint-disable-next-line no-param-reassign
         state.currentChannelId = defaultCurrent;
       }
       return {
