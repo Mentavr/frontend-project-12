@@ -1,81 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import { userData } from './apiDataSlice';
+
+
 
 const defaultCurrent = 1;
 
-const initialState = {
-  data: { channels: [], currentChannelId: defaultCurrent, shouldRedirectToNewChannel: false },
-};
+const adapter = createEntityAdapter();
+
+const initialState = adapter.getInitialState({currentChannelId: defaultCurrent});
 
 const channelsSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    redirectNewChannel: (state, { payload }) => ({
-      ...state, data: { ...state.data, shouldRedirectToNewChannel: payload },
-    }),
-    addInitialChannels: (state, { payload }) => ({
-      ...state,
-      data: { ...state.data, channels: [...payload] },
-    }),
-    addChannel: (state, { payload }) => {
-      if (state.data.shouldRedirectToNewChannel) {
-        return {
-          ...state,
-          data: {
-            ...state.data,
-            channels: [...state.data.channels, payload],
-            currentChannelId: payload.id,
-            shouldRedirectToNewChannel: false,
-          },
-        };
-      }
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          channels: [...state.data.channels, payload],
-        },
-      };
+    addChannel:adapter.addOne,
+    removeChannel: (state, {payload}) => {
+      const newCurrent =  payload.id === state.currentChannelId ?  
+      defaultCurrent : state.currentChannelId;
+      state.currentChannelId = newCurrent;
+      adapter.removeOne(state, payload.id);
     },
-
-    removeChannel: (state, { payload }) => {
-      const filterChannels = state.data.channels.filter(
-        (channel) => channel.id !== payload.id,
-      );
-      if (state.data.currentChannelId === payload.id) {
-        // eslint-disable-next-line no-param-reassign
-        state.currentChannelId = defaultCurrent;
-      }
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          channels: filterChannels,
-        },
-      };
-    },
-    renameChannel: (state, { payload }) => {
-      const removeChannels = state.data.channels
-        .map((channel) => (channel.id !== payload.id ? channel : payload));
-      return { ...state, data: { ...state.data, channels: removeChannels } };
-    },
-    setChannel: (state, { payload }) => {
-      if (state.shouldRedirectToNewChannel !== payload.shouldRedirectToNewChannel) {
-        return {
-          ...state,
-          data: { ...state.data, currentChannelId: payload.id },
-        };
-      }
-      return {
-        ...state,
-        data: { ...state.data, currentChannelId: payload },
-      };
-    },
+    renameChannel: adapter.setOne,
+    setChannel: ((state, {payload}) => ({ ...state, currentChannelId: payload })),
   },
+  extraReducers: (builder) => {
+    builder.addCase(userData.fulfilled, (state, {payload}) => {
+      const channels = payload.channels;
+      adapter.setMany(state, channels);
+  })
+  }
 });
 
 export const {
   addChannel, removeChannel, renameChannel, setChannel, addInitialChannels, redirectNewChannel,
 } = channelsSlice.actions;
-
+export const selectorChannels = adapter.getSelectors((state) => state.channels);
 export default channelsSlice.reducer;

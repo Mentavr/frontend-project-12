@@ -4,38 +4,37 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
-import routes from '../routes';
-import img from '../image/projectMen.jpeg';
-import useAuth from '../hooks/useAuth';
+import routesApi from '../../routesApi';
+import routes from '../../routesSpi';
+import img from '../../image/projectMen.jpeg';
+import useAuth from '../../hooks/useAuth';
 
 const Login = () => {
   const autContext = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const inputRef = useRef(null);
-  const loginPathApi = routes.userLogin();
+  const loginPathApi = routesApi.userLogin();
+  const {chatPath, atorithationPath} = routes;
 
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
   const SignupSchema = Yup.object({
-    username: Yup.string().required(t('errors.required')),
-    password: Yup.string().required(t('errors.required')),
+    username: Yup.string().required('errors.required'),
+    password: Yup.string().required('errors.required'),
   });
 
   const errorsNet = (numberError, formik) => {
+    console.log('autorization numberErroor', numberError)
     if (numberError === 401) {
       const { errors } = formik;
-      errors.password = t('errors.enterNickPassword');
-    }
-    if (numberError === 0) {
-      toast.error(t('errors.errorConnect'));
-    }
+      errors.password = 'errors.enterNickPassword';
+    };
   };
 
   const formik = useFormik({
@@ -46,11 +45,12 @@ const Login = () => {
     validationSchema: SignupSchema,
     onSubmit: async () => {
       try {
-        const login = await axios.post(loginPathApi, formik.values);
-        localStorage.setItem('userId', JSON.stringify(login.data));
-        autContext.logIn();
-        navigate('/');
-      } catch ({ request }) {
+        console.log('formik valuse', formik.values)
+        console.log('formik  login path api', loginPathApi)
+        await autContext.logIn(formik.values, loginPathApi);
+        navigate(chatPath());
+      } catch (error) {
+        console.log( 'errors async autorization',error)
         const numberError = request.status;
         errorsNet(numberError, formik);
       }
@@ -67,7 +67,7 @@ const Login = () => {
         <div className="d-flex flex-column h-100">
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
-              <a className="navbar-brand" href={routes.atorithationPath}>
+              <a className="navbar-brand" href={atorithationPath()}>
                 {t('text.hexletHeader')}
               </a>
             </div>
@@ -104,7 +104,7 @@ const Login = () => {
                           />
                           <label htmlFor="username">{t('text.userName')}</label>
                           <Form.Control.Feedback type="invalid" tooltip>
-                            {errors.username}
+                            {t(errors.username)}
                           </Form.Control.Feedback>
                         </Form.Floating>
                       </Form.Group>
@@ -124,7 +124,7 @@ const Login = () => {
                           />
                           <label htmlFor="password">{t('text.password')}</label>
                           <Form.Control.Feedback type="invalid" tooltip>
-                            {errors.password}
+                            {t(errors.password)}
                           </Form.Control.Feedback>
                         </Form.Floating>
                       </Form.Group>

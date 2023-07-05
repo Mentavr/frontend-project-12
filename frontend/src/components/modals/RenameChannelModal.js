@@ -4,29 +4,32 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import useAutoFocus from '../../hooks/useAutoFocus';
 import { closeModal } from '../../slice/modalSwitch';
 import SocketContext from '../../context/socketContext';
 
-const RenameChannel = ({ idChannel }) => {
+const RenameChannel = () => {
+  const {idChannel} = useSelector(state => state.modal)
   const renameFocus = useAutoFocus();
-  const socket = useContext(SocketContext);
+  const {renameChannelEmit} = useContext(SocketContext);
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const handleClose = () => dispatch(closeModal());
-
-  const namesChannels = useSelector((state) => state.channels.data.channels
-    .map((channel) => channel.name));
+  const namesChannels = useSelector((state) => state.channels.ids
+  .map((id) => {
+    const channel = state.channels.entities[id]
+    return channel.name
+  },
+  ));
 
   const SignupSchema = Yup.object({
     renameChannel: Yup.string()
-      .min(3, t('errors.longText'))
-      .max(20, t('errors.longText'))
-      .notOneOf(namesChannels, t('errors.existChanel'))
-      .required(t('errors.required')),
+      .min(3, 'errors.longText')
+      .max(20, 'errors.longText')
+      .notOneOf(namesChannels, 'errors.existChanel')
+      .required('errors.required'),
   });
 
   const formik = useFormik({
@@ -35,10 +38,7 @@ const RenameChannel = ({ idChannel }) => {
     },
     validationSchema: SignupSchema,
     onSubmit: (value) => {
-      socket.emit('renameChannel', {
-        id: idChannel,
-        name: value.renameChannel,
-      });
+      renameChannelEmit(idChannel, value.renameChannel)
       handleClose();
     },
   });
@@ -47,19 +47,6 @@ const RenameChannel = ({ idChannel }) => {
     handleSubmit, handleChange, errors, values, touched, isSubmitting,
   } = formik;
   return (
-    <Modal
-      show
-      onHide={handleClose}
-      backdrop="static"
-      keyboard
-      centered
-      restoreFocus="true"
-      autoFocus
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>{t('text.renameChannel')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group as={Col} htmlFor="validationFormikRenameChannel">
             <Form.Label className="visually-hidden" htmlFor="renameChannel">
@@ -78,7 +65,7 @@ const RenameChannel = ({ idChannel }) => {
               required
             />
             <Form.Control.Feedback type="invalid">
-              {errors.renameChannel}
+              {t(errors.renameChannel)}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="d-flex justify-content-end">
@@ -98,8 +85,6 @@ const RenameChannel = ({ idChannel }) => {
             </Button>
           </Form.Group>
         </Form>
-      </Modal.Body>
-    </Modal>
   );
 };
 export default RenameChannel;

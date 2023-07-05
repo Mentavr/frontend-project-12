@@ -4,20 +4,20 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { openModal } from '../slice/modalSwitch';
+import { openModal } from '../../slice/modalSwitch';
 
 const DropdownMenu = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { activeButton, elem, choseChannelHandler } = props;
+  const { activeButton, elem, choseChannelHandler, handlerShowModal } = props;
 
   const handlerOpenModal = (modalName, id) => dispatch(openModal(
     {
       opened: modalName,
-      idChannel: id,
+      id: id,
     },
   ));
-
+try{
   return (
     <Dropdown as={ButtonGroup} className="d-flex">
       <Button
@@ -52,6 +52,9 @@ const DropdownMenu = (props) => {
       </Dropdown.Menu>
     </Dropdown>
   );
+}catch(e){
+  console.log(e)
+}
 };
 
 export default DropdownMenu;

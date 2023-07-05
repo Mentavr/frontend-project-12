@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "[![Actions Status](https://github.com/Mentavr/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/Mentavr/frontend-project-12/actions)",
+  "description": "final project",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/Mentavr/frontend-project-12#readme",
   "dependencies": {
-    "@hexlet/chat-server": "^1.1.6",
-    "leo-profanity": "^1.7.0"
+    "@hexlet/chat-server": "^1.1.6"
   }
 }

@@ -3,19 +3,20 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import img from '../image/avatarRegistration.jpg';
-import routes from '../routes';
-import useAuth from '../hooks/useAuth';
+import img from '../../image/avatarRegistration.jpg';
+import routesApi from '../../routesApi';
+import routes from '../../routesSpi';
+import useAuth from '../../hooks/useAuth';
 
 const FormRegistration = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const inputRef = useRef(null);
-  const createUserPathApi = routes.createUser();
+  const createUserPathApi = routesApi.createUser();
+  const {atorithationPath, chatPath } = routes;
   const autContext = useAuth();
 
   useEffect(() => {
@@ -24,15 +25,15 @@ const FormRegistration = () => {
 
   const SignupSchema = Yup.object({
     username: Yup.string()
-      .required(t('errors.required'))
-      .min(3, t('errors.longText'))
-      .max(20, t('errors.longText')),
+      .required('errors.required')
+      .min(3, 'errors.longText')
+      .max(20, 'errors.longText'),
     password: Yup.string()
-      .min(6, t('errors.tooShortPassword'))
-      .required(t('errors.required')),
+      .min(6, 'errors.tooShortPassword')
+      .required('errors.required'),
     confirmPassword: Yup.string().when('password', (password, schema) => schema.test({
       test: (confirmPassword) => password === confirmPassword,
-      message: t('errors.differentPassword'),
+      message: 'errors.differentPassword',
     })),
   });
 
@@ -43,14 +44,12 @@ const FormRegistration = () => {
       confirmPassword: '',
     },
     validationSchema: SignupSchema,
-    onSubmit: async (values) => {
+    onSubmit: async () => {
       try {
-        const login = await axios.post(createUserPathApi, values);
-        localStorage.setItem('userId', JSON.stringify(login.data));
-        autContext.logIn();
-        return navigate('/');
+        await autContext.logIn(values, createUserPathApi);
+        return navigate(chatPath());
       } catch {
-        formik.errors.confirmPassword = t('errors.existUser');
+        formik.errors.confirmPassword = 'errors.existUser';
         return autContext.logOut();
       }
     },
@@ -63,7 +62,7 @@ const FormRegistration = () => {
     <div className="d-flex flex-column h-100">
       <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
         <div className="container">
-          <a className="navbar-brand" href={routes.atorithationPath}>
+          <a className="navbar-brand" href={atorithationPath()}>
             {t('text.hexletHeader')}
           </a>
         </div>
@@ -98,7 +97,7 @@ const FormRegistration = () => {
                       </label>
 
                       <Form.Control.Feedback type="invalid" tooltip>
-                        {errors.username}
+                        {t(errors.username)}
                       </Form.Control.Feedback>
                     </Form.Floating>
                   </Form.Group>
@@ -118,7 +117,7 @@ const FormRegistration = () => {
                       />
                       <label htmlFor="password">{t('text.password')}</label>
                       <Form.Control.Feedback type="invalid" tooltip>
-                        {errors.password}
+                        {t(errors.password)}
                       </Form.Control.Feedback>
                     </Form.Floating>
                   </Form.Group>
@@ -142,7 +141,7 @@ const FormRegistration = () => {
                         {t('text.confirmPassword')}
                       </label>
                       <Form.Control.Feedback type="invalid" tooltip>
-                        {errors.confirmPassword}
+                        {t(errors.confirmPassword)}
                       </Form.Control.Feedback>
                     </Form.Floating>
                   </Form.Group>

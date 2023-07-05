@@ -4,55 +4,46 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import Button from 'react-bootstrap/Button';
 import filter from 'leo-profanity';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { openModal } from '../slice/modalSwitch';
-import { setChannel, addInitialChannels } from '../slice/channelsSlice';
-import { addInitialMessages } from '../slice/messagesSlice';
+import { openModal } from '../../slice/modalSwitch';
+import { setChannel, selectorChannels } from '../../slice/channelsSlice';
+import { selectorMessages } from '../../slice/messagesSlice';
 import DropdownMenu from './DropdownMenu';
-import SocketContext from '../context/socketContext';
-import useAuth from '../hooks/useAuth';
-import routes from '../routes';
+import SocketContext from '../../context/socketContext';
+import useAuth from '../../hooks/useAuth';
+import routes from '../../routesSpi';
 import Messages from './Messages';
+import { userData } from '../../slice/apiDataSlice';
+import LoadingPage from './loadingPage';
+import { Outlet } from 'react-router-dom';
+
+
 
 const Chat = () => {
   const dispatch = useDispatch();
-  const [netError, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const userData = async () => {
-      try {
-        const userId = JSON.parse(localStorage.getItem('userId'));
-        const dataPath = routes.dataUser();
-        const { data } = await axios.get(dataPath, {
-          headers: {
-            Authorization: `Bearer ${userId.token}`,
-          },
-        });
-        dispatch(addInitialMessages(data.messages));
-        dispatch(addInitialChannels(data.channels));
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-      }
-    };
-    userData();
-  }, [dispatch]);
-
+  const {loadingStatus} = useSelector((state) => state.apiData)
+  const {chatPath} = routes;
   const autContext = useAuth();
-  const socket = useContext(SocketContext);
+  const {addMessageEmit} = useContext(SocketContext);
   const { t } = useTranslation();
   const userName = JSON.parse(localStorage.userId).username;
-  const dataMessages = useSelector((state) => state.messages.data);
-  const dataChanells = useSelector((state) => state.channels.data);
-
-  const { currentChannelId } = useSelector((state) => state.channels.data);
-  const currentChanel = dataChanells.channels.find((channel) => channel.id === currentChannelId)
-    || 'general';
-  const filterMesseges = dataMessages.messages.filter(
-    (message) => message.channelId === currentChannelId,
+  const messagesState = useSelector(selectorMessages.selectAll);
+  const channelEntities = useSelector(selectorChannels.selectEntities);
+  const channelIds = useSelector(selectorChannels.selectIds);
+  const { currentChannelId } = useSelector((state) => state.channels);
+  const currentChanelId = channelIds.find((id) => id === currentChannelId);
+  const currentNameChannel = currentChanelId ? channelEntities[currentChanelId].name : 'general';
+  const filterMesseges = messagesState.filter((messageState) => {
+      if(messageState.channelId === currentChannelId) {
+        return messageState;
+      }
+    },
   );
+
+  useEffect(() => {
+    dispatch(userData());
+  },[dispatch]);
+
 
   const renderingMessages = () => {
     const lastMessage = filterMesseges[filterMesseges.length - 1];
@@ -66,7 +57,7 @@ const Chat = () => {
 
   const exitHandler = () => autContext.logOut();
   const choseChannelHandler = (e) => dispatch(setChannel(Number(e.target.id)));
-  const hendlerNewModalChannel = () => dispatch(openModal({ opened: 'newChannelModal', idChannel: null }));
+  const hendlerNewModalChannel = () => dispatch(openModal({ opened: 'newChannelModal', id: currentChanelId }));
 
   const formik = useFormik({
     initialValues: {
@@ -74,49 +65,16 @@ const Chat = () => {
     },
     onSubmit: ({ message }) => {
       const filterMessege = filter.clean(message);
-      socket.emit('newMessage', {
-        body: filterMessege,
-        channelId: currentChannelId,
-        username: userName,
-      });
+      addMessageEmit(filterMessege,  currentChannelId, userName)
       formik.values.message = '';
     },
   });
   const { handleSubmit, values, handleChange } = formik;
 
-  if (netError) {
-    toast.error(t('errors.errorConnect'));
-  }
-
-  if (loading) {
+  if (loadingStatus === 'loading' || loadingStatus === 'failed') {
+    loadingStatus === 'failed' ? toast.error(t('errors.errorConnect')) : null;
     return (
-      <div className="h-100">
-        <div className="h-100">
-          <div className="d-flex flex-column h-100">
-            <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-              <div className="container">
-                <a className="navbar-brand" href={routes.chatPath}>
-                  {t('text.hexletHeader')}
-                </a>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={() => exitHandler()}
-                >
-                  {t('text.exit')}
-                </button>
-              </div>
-            </nav>
-            <div className="h-100 d-flex justify-content-center align-items-center">
-              <div role="status" className="spinner-border text-primary">
-                <span className="visually-hidden">
-                  {t('text.loading')}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+     <LoadingPage  exitHandler={exitHandler}/>
     );
   }
 
@@ -126,7 +84,7 @@ const Chat = () => {
         <div className="d-flex flex-column h-100">
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
-              <a className="navbar-brand" href="/">
+              <a className="navbar-brand" href={chatPath()}>
                 {t('text.hexletHeader')}
               </a>
               <button
@@ -162,31 +120,31 @@ const Chat = () => {
                   </Button>
                 </div>
                 <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
-                  {dataChanells.channels.map((elem) => {
-                    const activeButton = elem.id === currentChannelId
+                  {channelIds.map((id) => {
+                    const activeButton = id === currentChannelId
                       ? 'btn-secondary'
                       : 'btn-light';
-                    if (elem.removable) {
+                    if (channelEntities[id].removable) {
                       return (
-                        <li key={elem.id} className="nav-item w-100">
+                        <li key={id} className="nav-item w-100">
                           <DropdownMenu
                             activeButton={activeButton}
-                            elem={elem}
+                            elem={channelEntities[id]}
                             choseChannelHandler={choseChannelHandler}
                           />
                         </li>
                       );
                     }
                     return (
-                      <li key={elem.id} className="nav-item w-100">
+                      <li key={id} className="nav-item w-100">
                         <Button
                           type="button"
                           className={`w-100 rounded-0 text-start btn ${activeButton}`}
-                          id={elem.id}
+                          id={id}
                           onClick={choseChannelHandler}
                         >
                           <span className="me-1">#</span>
-                          {elem.name}
+                          {channelEntities[id].name}
                         </Button>
                       </li>
                     );
@@ -199,7 +157,7 @@ const Chat = () => {
                     <p className="m-0">
                       <b>
                         #
-                        {currentChanel.name}
+                        {currentNameChannel}
                       </b>
                     </p>
                     <span className="text-muted">

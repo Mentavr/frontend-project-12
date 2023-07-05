@@ -1,33 +1,31 @@
 import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
-import { closeModal } from '../../slice/modalSwitch';
 import SocketContext from '../../context/socketContext';
-import { redirectNewChannel } from '../../slice/channelsSlice';
 
-const ModalChannel = () => {
-  const socket = useContext(SocketContext);
+const ModalChannel = ({handleClose}) => {
+  const {newChannelEmit} = useContext(SocketContext);
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const namesChannels = useSelector((state) => state.channels.data.channels.map(
-    (channel) => channel.name,
+  const namesChannels = useSelector((state) => state.channels.ids
+  .map((id) => {
+    const channel = state.channels.entities[id]
+    return channel.name
+  },
   ));
 
-  const handleClose = () => dispatch(closeModal());
 
   const SignupSchema = Yup.object({
     newChannel: Yup.string()
-      .min(3, t('errors.longText'))
-      .max(20, t('errors.longText'))
-      .notOneOf(namesChannels, t('errors.existChanel'))
-      .required(t('errors.required')),
+      .min(3, 'errors.longText')
+      .max(20, 'errors.longText')
+      .notOneOf(namesChannels, 'errors.existChanel')
+      .required('errors.required'),
   });
 
   const formik = useFormik({
@@ -37,9 +35,8 @@ const ModalChannel = () => {
     validationSchema: SignupSchema,
     onSubmit: ({ newChannel }) => {
       const filterMessege = filter.clean(newChannel);
-      socket.emit('newChannel', { name: filterMessege });
+      newChannelEmit(filterMessege)
       handleClose();
-      dispatch(redirectNewChannel(true));
       formik.values.newChannel = '';
     },
   });
@@ -48,18 +45,6 @@ const ModalChannel = () => {
   } = formik;
 
   return (
-    <Modal
-      show
-      onHide={handleClose}
-      backdrop="static"
-      keyboard
-      centered
-      restoreFocus="true"
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>{t('text.addChanel')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
         <Form onSubmit={handleSubmit}>
           <Form.Group as={Col} htmlFor="validationFormikNewChannel">
             <Form.Label className="visually-hidden" htmlFor="newChannel">
@@ -78,7 +63,7 @@ const ModalChannel = () => {
               autoFocus
             />
             <Form.Control.Feedback type="invalid">
-              {errors.newChannel}
+              {t(errors.newChannel)}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="d-flex justify-content-end">
@@ -94,8 +79,6 @@ const ModalChannel = () => {
             </Button>
           </Form.Group>
         </Form>
-      </Modal.Body>
-    </Modal>
   );
 };
 

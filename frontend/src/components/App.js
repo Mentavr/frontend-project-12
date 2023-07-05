@@ -1,97 +1,63 @@
-import { Provider, ErrorBoundary } from '@rollbar/react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import React, { useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-  Navigate,
-} from 'react-router-dom';
-import { Provider as ProviderReduce } from 'react-redux';
-import { I18nextProvider } from 'react-i18next';
-import { io } from 'socket.io-client';
-import store from '../slice/index.js';
-import ErrorPage from './ErrorPage.js';
-import i18n from '../i18n.js';
-import ModalWraper from './modals/ModalWraper.js';
-import Login from './FormAutorization.js';
-import FormRegistration from './FormRegistration.js';
-import Chat from './Chat.js';
-import SocketContext from '../context/socketContext.js';
-import AuthContext from '../context/loggerContext.js';
-import routes from '../routes.js';
-import SocketOn from './SocketOn.js';
-import useAuth from '../hooks/useAuth.js';
-
-const {
-  atorithationPath, chatPath, registrationPath, allPath,
-} = routes;
-const socket = io();
-
-const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  const logIn = () => setLoggedIn(true);
-  const logOut = () => {
-    localStorage.removeItem('userId');
-    return setLoggedIn(false);
-  };
-
-  return (
-    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-const PrivateRoute = ({ children }) => {
-  const location = useLocation();
-  const autContext = useAuth();
-  return autContext.loggedIn
-    ? (children) : (<Navigate to={atorithationPath} state={{ from: location }} />);
-};
+import { Provider, ErrorBoundary } from "@rollbar/react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import filter from "leo-profanity";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider as ProviderReduce } from "react-redux";
+import { I18nextProvider } from "react-i18next";
+import store from "../slice/index.js";
+import ErrorPage from "./errorPage/ErrorPage.js";
+import i18n from "../i18n.js";
+import ModalWraper from "./modals/ModalWraper.js";
+import Login from "./autorizationPage/FormAutorization.js";
+import FormRegistration from "./registrationPage/FormRegistration.js";
+import Chat from "./chatPage/Chat.js";
+import ApiProvider from "./common/ApiProvider.js";
+import AuthProvider from "./common/AuthProvider.js";
+import routes from "../routesSpi.js";
+import PrivateRoute from "./common/PrivateRoute.js";
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_MY_TOKEN,
-  environment: 'testenv',
+  environment: "testenv",
 };
 
-const App = () => (
-  <SocketContext.Provider value={socket}>
-    <AuthProvider>
-      <I18nextProvider i18n={i18n}>
-        <Provider config={rollbarConfig}>
-          <ErrorBoundary>
-            <ProviderReduce store={store}>
-              <ToastContainer />
-              <SocketOn>
+const App = () => {
+  const { atorithationPath, chatPath, registrationPath, allPath } = routes;
+  useEffect(() => {
+    filter.add(filter.getDictionary("en"));
+    filter.add(filter.getDictionary("ru"));
+  }, []);
+
+  return (
+    <ProviderReduce store={store}>
+      <ApiProvider>
+        <AuthProvider>
+          <I18nextProvider i18n={i18n}>
+            <Provider config={rollbarConfig}>
+              <ErrorBoundary>
+                <ToastContainer />
                 <Router>
                   <Routes>
+                    <Route path={chatPath()} element={<PrivateRoute />}>
+                      <Route index element={<Chat />} />
+                    </Route>
                     <Route
-                      path={chatPath}
-                      element={(
-                        <PrivateRoute>
-                          <Chat />
-                        </PrivateRoute>
-                      )}
-                    />
-                    <Route path={atorithationPath} element={<Login />} />
-                    <Route
-                      path={registrationPath}
+                      path={registrationPath()}
                       element={<FormRegistration />}
                     />
-                    <Route path={allPath} element={<ErrorPage />} />
+                    <Route path={ atorithationPath()} element={<Login />} />
+                    <Route path={allPath()} element={<ErrorPage />} />
                   </Routes>
                 </Router>
                 <ModalWraper />
-              </SocketOn>
-            </ProviderReduce>
-          </ErrorBoundary>
-        </Provider>
-      </I18nextProvider>
-    </AuthProvider>
-  </SocketContext.Provider>
-);
+              </ErrorBoundary>
+            </Provider>
+          </I18nextProvider>
+        </AuthProvider>
+      </ApiProvider>
+    </ProviderReduce>
+  );
+};
 export default App;
