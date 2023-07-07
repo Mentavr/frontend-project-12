@@ -11,8 +11,6 @@ const AuthProvider = ({ children }) => {
             setLoggedIn(true);
         }
         catch ({ request }) {
-          console.log('AuthProvide' , request)
-            setLoggedIn(null);
             return request;
         }
     }

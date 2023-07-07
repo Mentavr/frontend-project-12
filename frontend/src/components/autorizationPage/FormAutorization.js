@@ -6,7 +6,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
 import routesApi from '../../routesApi';
 import routes from '../../routesSpi';
 import img from '../../image/projectMen.jpeg';
@@ -29,14 +28,6 @@ const Login = () => {
     password: Yup.string().required('errors.required'),
   });
 
-  const errorsNet = (numberError, formik) => {
-    console.log('autorization numberErroor', numberError)
-    if (numberError === 401) {
-      const { errors } = formik;
-      errors.password = 'errors.enterNickPassword';
-    };
-  };
-
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -44,16 +35,8 @@ const Login = () => {
     },
     validationSchema: SignupSchema,
     onSubmit: async () => {
-      try {
-        console.log('formik valuse', formik.values)
-        console.log('formik  login path api', loginPathApi)
-        await autContext.logIn(formik.values, loginPathApi);
-        navigate(chatPath());
-      } catch (error) {
-        console.log( 'errors async autorization',error)
-        const numberError = request.status;
-        errorsNet(numberError, formik);
-      }
+      const request = await autContext.logIn(formik.values, loginPathApi);
+      request ? errors.password = 'errors.enterNickPassword' : navigate(chatPath());
     },
   });
 
