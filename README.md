@@ -14,7 +14,7 @@
 This prodjet imitates chat. There is registration, as well as simple chat between users.
 
 ![lg](/Users/user/Desktop/frontend-project-12/images/chat.png)
-![Chat example](images/chat.png)
+![Chat example]((https://github.com/Mentavr/frontend-project-12/images/chat.png)
 
 ## How to get into the chat?
 
