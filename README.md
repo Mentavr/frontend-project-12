@@ -13,7 +13,7 @@
 
 This prodjet imitates chat. There is registration, as well as simple chat between users.
 
-(/Users/user/Desktop/frontend-project-12/images/chat.png)
+![lg](/Users/user/Desktop/frontend-project-12/images/chat.png)
 ![Chat example](images/chat.png)
 
 ## How to get into the chat?
