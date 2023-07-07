@@ -1,34 +1,32 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import { userData } from './apiDataSlice';
 
-
-
 const defaultCurrent = 1;
 
 const adapter = createEntityAdapter();
 
-const initialState = adapter.getInitialState({currentChannelId: defaultCurrent});
+const initialState = adapter.getInitialState({ currentChannelId: defaultCurrent });
 
 const channelsSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    addChannel:adapter.addOne,
-    removeChannel: (state, {payload}) => {
-      const newCurrent =  payload.id === state.currentChannelId ?  
-      defaultCurrent : state.currentChannelId;
+    addChannel: adapter.addOne,
+    removeChannel: (state, { payload }) => {
+      const newCurrent = payload.id === state.currentChannelId
+        ? defaultCurrent : state.currentChannelId;
       state.currentChannelId = newCurrent;
       adapter.removeOne(state, payload.id);
     },
     renameChannel: adapter.setOne,
-    setChannel: ((state, {payload}) => ({ ...state, currentChannelId: payload })),
+    setChannel: ((state, { payload }) => ({ ...state, currentChannelId: payload })),
   },
   extraReducers: (builder) => {
-    builder.addCase(userData.fulfilled, (state, {payload}) => {
-      const channels = payload.channels;
+    builder.addCase(userData.fulfilled, (state, { payload }) => {
+      const { channels } = payload;
       adapter.setMany(state, channels);
-  })
-  }
+    });
+  },
 });
 
 export const {

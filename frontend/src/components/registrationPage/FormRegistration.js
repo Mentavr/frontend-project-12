@@ -16,7 +16,7 @@ const FormRegistration = () => {
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const createUserPathApi = routesApi.createUser();
-  const {atorithationPath, chatPath } = routes;
+  const { atorithationPath, chatPath } = routes;
   const autContext = useAuth();
 
   useEffect(() => {

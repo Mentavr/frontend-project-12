@@ -6,8 +6,8 @@ import { closeModal } from '../../slice/modalSwitch';
 import SocketContext from '../../context/socketContext';
 
 const RemoveChannel = () => {
-  const {idChannel} = useSelector(state => state.modal)
-  const {removeChannelEmit} = useContext(SocketContext);
+  const { idChannel } = useSelector((state) => state.modal);
+  const { removeChannelEmit } = useContext(SocketContext);
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const handleClose = () => dispatch(closeModal());
@@ -17,21 +17,21 @@ const RemoveChannel = () => {
   };
 
   return (
-      <>
-        <p className="lead">{t('text.confirm')}</p>
-        <div className="d-flex justify-content-end">
-          <Button variant="secondary" onClick={handleClose} className="me-2">
-            {t('text.cancel')}
-          </Button>
-          <Button
-            type="submit"
-            variant="danger"
-            onClick={() => handalRemove(idChannel)}
-          >
-            {t('text.delete')}
-          </Button>
-        </div>
-      </>
+    <>
+      <p className="lead">{t('text.confirm')}</p>
+      <div className="d-flex justify-content-end">
+        <Button variant="secondary" onClick={handleClose} className="me-2">
+          {t('text.cancel')}
+        </Button>
+        <Button
+          type="submit"
+          variant="danger"
+          onClick={() => handalRemove(idChannel)}
+        >
+          {t('text.delete')}
+        </Button>
+      </div>
+    </>
   );
 };
 export default RemoveChannel;

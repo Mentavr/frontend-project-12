@@ -17,7 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const loginPathApi = routesApi.userLogin();
-  const {chatPath, atorithationPath} = routes;
+  const { chatPath, atorithationPath } = routes;
 
   useEffect(() => {
     inputRef.current.focus();

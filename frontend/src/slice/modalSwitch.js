@@ -4,7 +4,7 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState: { openedModal: null, idChannel: null },
   reducers: {
-    openModal: (state, {payload}) => ({
+    openModal: (state, { payload }) => ({
       ...state,
       openedModal: payload.opened,
       idChannel: payload.id,

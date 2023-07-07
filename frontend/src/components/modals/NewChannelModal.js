@@ -9,16 +9,14 @@ import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
 import SocketContext from '../../context/socketContext';
 
-const ModalChannel = ({handleClose}) => {
-  const {newChannelEmit} = useContext(SocketContext);
+const ModalChannel = ({ handleClose }) => {
+  const { newChannelEmit } = useContext(SocketContext);
   const { t } = useTranslation();
   const namesChannels = useSelector((state) => state.channels.ids
-  .map((id) => {
-    const channel = state.channels.entities[id]
-    return channel.name
-  },
-  ));
-
+    .map((id) => {
+      const channel = state.channels.entities[id];
+      return channel.name;
+    }));
 
   const SignupSchema = Yup.object({
     newChannel: Yup.string()
@@ -35,7 +33,7 @@ const ModalChannel = ({handleClose}) => {
     validationSchema: SignupSchema,
     onSubmit: ({ newChannel }) => {
       const filterMessege = filter.clean(newChannel);
-      newChannelEmit(filterMessege)
+      newChannelEmit(filterMessege);
       handleClose();
       formik.values.newChannel = '';
     },
@@ -45,40 +43,40 @@ const ModalChannel = ({handleClose}) => {
   } = formik;
 
   return (
-        <Form onSubmit={handleSubmit}>
-          <Form.Group as={Col} htmlFor="validationFormikNewChannel">
-            <Form.Label className="visually-hidden" htmlFor="newChannel">
-              {t('text.nameChanel')}
-            </Form.Label>
-            <Form.Control
-              className="mb-2"
-              id="newChannel"
-              name="newChannel"
-              type="text"
-              autoComplete="newChannel"
-              onChange={handleChange}
-              value={values.newChannel}
-              isInvalid={touched.newChannel && errors.newChannel}
-              required
-              autoFocus
-            />
-            <Form.Control.Feedback type="invalid">
-              {t(errors.newChannel)}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="d-flex justify-content-end">
-            <Button className="me-2 btn-secondary" onClick={handleClose}>
-              {t('text.cancel')}
-            </Button>
-            <Button
-              type="submit"
-              className="btn-primary"
-              disabled={isSubmitting}
-            >
-              {t('text.sendForm')}
-            </Button>
-          </Form.Group>
-        </Form>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group as={Col} htmlFor="validationFormikNewChannel">
+        <Form.Label className="visually-hidden" htmlFor="newChannel">
+          {t('text.nameChanel')}
+        </Form.Label>
+        <Form.Control
+          className="mb-2"
+          id="newChannel"
+          name="newChannel"
+          type="text"
+          autoComplete="newChannel"
+          onChange={handleChange}
+          value={values.newChannel}
+          isInvalid={touched.newChannel && errors.newChannel}
+          required
+          autoFocus
+        />
+        <Form.Control.Feedback type="invalid">
+          {t(errors.newChannel)}
+        </Form.Control.Feedback>
+      </Form.Group>
+      <Form.Group className="d-flex justify-content-end">
+        <Button className="me-2 btn-secondary" onClick={handleClose}>
+          {t('text.cancel')}
+        </Button>
+        <Button
+          type="submit"
+          className="btn-primary"
+          disabled={isSubmitting}
+        >
+          {t('text.sendForm')}
+        </Button>
+      </Form.Group>
+    </Form>
   );
 };
 

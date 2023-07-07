@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import Button from 'react-bootstrap/Button';
 import filter from 'leo-profanity';
 import { toast } from 'react-toastify';
+import { Outlet } from 'react-router-dom';
 import { openModal } from '../../slice/modalSwitch';
 import { setChannel, selectorChannels } from '../../slice/channelsSlice';
 import { selectorMessages } from '../../slice/messagesSlice';
@@ -15,16 +16,13 @@ import routes from '../../routesSpi';
 import Messages from './Messages';
 import { userData } from '../../slice/apiDataSlice';
 import LoadingPage from './loadingPage';
-import { Outlet } from 'react-router-dom';
-
-
 
 const Chat = () => {
   const dispatch = useDispatch();
-  const {loadingStatus} = useSelector((state) => state.apiData)
-  const {chatPath} = routes;
+  const { loadingStatus } = useSelector((state) => state.apiData);
+  const { chatPath } = routes;
   const autContext = useAuth();
-  const {addMessageEmit} = useContext(SocketContext);
+  const { addMessageEmit } = useContext(SocketContext);
   const { t } = useTranslation();
   const userName = JSON.parse(localStorage.userId).username;
   const messagesState = useSelector(selectorMessages.selectAll);
@@ -34,16 +32,14 @@ const Chat = () => {
   const currentChanelId = channelIds.find((id) => id === currentChannelId);
   const currentNameChannel = currentChanelId ? channelEntities[currentChanelId].name : 'general';
   const filterMesseges = messagesState.filter((messageState) => {
-      if(messageState.channelId === currentChannelId) {
-        return messageState;
-      }
-    },
-  );
+    if (messageState.channelId === currentChannelId) {
+      return messageState;
+    }
+  });
 
   useEffect(() => {
     dispatch(userData());
-  },[dispatch]);
-
+  }, [dispatch]);
 
   const renderingMessages = () => {
     const lastMessage = filterMesseges[filterMesseges.length - 1];
@@ -65,7 +61,7 @@ const Chat = () => {
     },
     onSubmit: ({ message }) => {
       const filterMessege = filter.clean(message);
-      addMessageEmit(filterMessege,  currentChannelId, userName)
+      addMessageEmit(filterMessege, currentChannelId, userName);
       formik.values.message = '';
     },
   });
@@ -74,7 +70,7 @@ const Chat = () => {
   if (loadingStatus === 'loading' || loadingStatus === 'failed') {
     loadingStatus === 'failed' ? toast.error(t('errors.errorConnect')) : null;
     return (
-     <LoadingPage  exitHandler={exitHandler}/>
+      <LoadingPage exitHandler={exitHandler} />
     );
   }
 

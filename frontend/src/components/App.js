@@ -1,33 +1,35 @@
-import { Provider, ErrorBoundary } from "@rollbar/react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import filter from "leo-profanity";
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Provider as ProviderReduce } from "react-redux";
-import { I18nextProvider } from "react-i18next";
-import store from "../slice/index.js";
-import ErrorPage from "./errorPage/ErrorPage.js";
-import i18n from "../i18n.js";
-import ModalWraper from "./modals/ModalWraper.js";
-import Login from "./autorizationPage/FormAutorization.js";
-import FormRegistration from "./registrationPage/FormRegistration.js";
-import Chat from "./chatPage/Chat.js";
-import ApiProvider from "./common/ApiProvider.js";
-import AuthProvider from "./common/AuthProvider.js";
-import routes from "../routesSpi.js";
-import PrivateRoute from "./common/PrivateRoute.js";
+import { Provider, ErrorBoundary } from '@rollbar/react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import filter from 'leo-profanity';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Provider as ProviderReduce } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
+import store from '../slice/index.js';
+import ErrorPage from './errorPage/ErrorPage.js';
+import i18n from '../i18n.js';
+import ModalWraper from './modals/ModalWraper.js';
+import Login from './autorizationPage/FormAutorization.js';
+import FormRegistration from './registrationPage/FormRegistration.js';
+import Chat from './chatPage/Chat.js';
+import ApiProvider from './common/ApiProvider.js';
+import AuthProvider from './common/AuthProvider.js';
+import routes from '../routesSpi.js';
+import PrivateRoute from './common/PrivateRoute.js';
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_MY_TOKEN,
-  environment: "testenv",
+  environment: 'testenv',
 };
 
 const App = () => {
-  const { atorithationPath, chatPath, registrationPath, allPath } = routes;
+  const {
+    atorithationPath, chatPath, registrationPath, allPath,
+  } = routes;
   useEffect(() => {
-    filter.add(filter.getDictionary("en"));
-    filter.add(filter.getDictionary("ru"));
+    filter.add(filter.getDictionary('en'));
+    filter.add(filter.getDictionary('ru'));
   }, []);
 
   return (
@@ -47,7 +49,7 @@ const App = () => {
                       path={registrationPath()}
                       element={<FormRegistration />}
                     />
-                    <Route path={ atorithationPath()} element={<Login />} />
+                    <Route path={atorithationPath()} element={<Login />} />
                     <Route path={allPath()} element={<ErrorPage />} />
                   </Routes>
                 </Router>

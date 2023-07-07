@@ -4,7 +4,7 @@ import errorPage from '../../image/errorPage.svg';
 import routes from '../../routesSpi';
 
 const ErrorPage = () => {
-  const {atorithationPath, chatPath} = routes;
+  const { atorithationPath, chatPath } = routes;
   const { t } = useTranslation();
   return (
     <div className="h-100">
