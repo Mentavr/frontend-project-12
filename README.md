@@ -17,4 +17,11 @@ This prodjet imitates chat. There is registration, as well as simple chat betwee
 
 ## How to get into the chat?
 
-You can use login via admin (user: admin, password: admin), or register a user.
+You can use login via admin (user: admin, password: admin)
+
+![Login example](https://github.com/Mentavr/frontend-project-12//blob/main/images/login.png?raw=true)
+
+or register a user.
+![Registration example](https://github.com/Mentavr/frontend-project-12//blob/main/images/registration.png?raw=true)
+
+## Enjoy the chat
