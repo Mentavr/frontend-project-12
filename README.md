@@ -3,16 +3,16 @@
 
 ### How to install?
 
-# Clone this repositori.
-# Instal dependencies(Makefile: "make install")
-# Start server (npm start)
+1.Clone this repositori.
+2.Instal dependencies(Makefile: "make install")
+3.Start server (npm start)
 
 ***
 
 ## Descriptoion
 
 This prodjet imitates chat. There is registration, as well as simple chat between users.
-[![Chat exapmle](/images/chat.png)]
+![Chat exapmle](/images/chat.png)
 
 ## How to get into the chat?
 
