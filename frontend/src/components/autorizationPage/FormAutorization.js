@@ -36,7 +36,12 @@ const Login = () => {
     validationSchema: SignupSchema,
     onSubmit: async () => {
       const request = await autContext.logIn(formik.values, loginPathApi);
-      request ? errors.password = 'errors.enterNickPassword' : navigate(chatPath());
+      if (request) {
+        const { errors } = formik;
+        errors.password = 'errors.enterNickPassword';
+        return;
+      }
+      navigate(chatPath());
     },
   });
 

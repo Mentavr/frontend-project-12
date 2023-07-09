@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import Button from 'react-bootstrap/Button';
 import filter from 'leo-profanity';
 import { toast } from 'react-toastify';
-import { Outlet } from 'react-router-dom';
 import { openModal } from '../../slice/modalSwitch';
 import { setChannel, selectorChannels } from '../../slice/channelsSlice';
 import { selectorMessages } from '../../slice/messagesSlice';
@@ -30,7 +29,7 @@ const Chat = () => {
   const channelIds = useSelector(selectorChannels.selectIds);
   const { currentChannelId } = useSelector((state) => state.channels);
   const currentChanelId = channelIds.find((id) => id === currentChannelId);
-  const currentNameChannel = currentChanelId ? channelEntities[currentChanelId].name : 'general';
+  const currentNameChannel = currentChanelId ? channelEntities[currentChanelId].name : 'general'
   const filterMesseges = messagesState.filter((messageState) => {
     if (messageState.channelId === currentChannelId) {
       return messageState;
