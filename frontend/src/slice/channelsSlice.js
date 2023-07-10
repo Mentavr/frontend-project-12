@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: "error" */
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import { userData } from './apiDataSlice';
 
