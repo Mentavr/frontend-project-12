@@ -6,12 +6,14 @@
 1. Clone this repositori.
 2. Instal dependencies(Makefile: "make install")
 3. Start server (npm start)
+4. Go to the folder "frontend"
+5. Start the page (npm start)
 
 ***
 
 ## Descriptoion
 
-This prodjet imitates chat. There is registration, as well as simple chat between users.
+This projeсt imitates chat. There is registration, as well as simple chat between users.
 
 ![Chat example](https://github.com/Mentavr/frontend-project-12//blob/main/images/chat.png?raw=true)
 
@@ -24,4 +26,4 @@ You can use login via admin (user: admin, password: admin)
 or register a user.
 ![Registration example](https://github.com/Mentavr/frontend-project-12//blob/main/images/registration.png?raw=true)
 
-## Enjoy the chat
+Enjoy the chat

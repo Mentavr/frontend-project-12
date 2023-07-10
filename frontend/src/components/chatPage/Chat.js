@@ -29,7 +29,7 @@ const Chat = () => {
   const channelIds = useSelector(selectorChannels.selectIds);
   const { currentChannelId } = useSelector((state) => state.channels);
   const currentChanelId = channelIds.find((id) => id === currentChannelId);
-  const currentNameChannel = currentChanelId ? channelEntities[currentChanelId].name : 'general'
+  const currentNameChannel = currentChanelId ? channelEntities[currentChanelId].name : 'general';
   const filterMesseges = messagesState.filter((messageState) => {
     if (messageState.channelId === currentChannelId) {
       return messageState;

@@ -33,4 +33,9 @@ export const {
   addChannel, removeChannel, renameChannel, setChannel, addInitialChannels, redirectNewChannel,
 } = channelsSlice.actions;
 export const selectorChannels = adapter.getSelectors((state) => state.channels);
+export const selectChannelNames = (state) => state.channels.ids
+  .map((id) => {
+    const channel = state.channels.entities[id];
+    return channel.name;
+  });
 export default channelsSlice.reducer;

@@ -8,15 +8,14 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
 import SocketContext from '../../context/socketContext';
+import { selectChannelNames } from '../../slice/channelsSlice';
 
 const ModalChannel = ({ handleClose }) => {
   const { newChannelEmit } = useContext(SocketContext);
   const { t } = useTranslation();
-  const namesChannels = useSelector((state) => state.channels.ids
-    .map((id) => {
-      const channel = state.channels.entities[id];
-      return channel.name;
-    }));
+  console.log('select', selectChannelNames)
+  const namesChannels = useSelector(selectChannelNames);
+  console.log(namesChannels)
 
   const SignupSchema = Yup.object({
     newChannel: Yup.string()
