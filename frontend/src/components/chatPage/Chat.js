@@ -62,8 +62,12 @@ const Chat = () => {
   });
   const { handleSubmit, values, handleChange } = formik;
 
-  if (loadingStatus === 'loading' || loadingStatus === 'failed') {
-    loadingStatus === 'failed' ? toast.error(t('errors.errorConnect')) : null;
+  if (loadingStatus === 'failed') {
+    toast.error(t('errors.errorConnect'));
+    return <LoadingPage exitHandler={exitHandler} />;
+  }
+
+  if (loadingStatus === 'loading') {
     return (
       <LoadingPage exitHandler={exitHandler} />
     );
