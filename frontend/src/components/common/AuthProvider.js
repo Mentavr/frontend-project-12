@@ -8,7 +8,7 @@ const AuthProvider = ({ children }) => {
     try {
       const login = await axios.post(path, values);
       localStorage.setItem('userId', JSON.stringify(login.data));
-      setLoggedIn(true);
+      return setLoggedIn(true);
     } catch ({ request }) {
       return request;
     }

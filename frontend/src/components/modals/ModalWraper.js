@@ -26,12 +26,12 @@ const ModalOpen = () => {
   const isShow = Boolean(openedModal);
   const handleClose = () => dispatch(closeModal());
 
-  const renderContent = (openedModal, handleClose) => {
-    const ComponetContent = modalsMap[openedModal];
+  const renderContent = (openedModalMap, handleCloseRender) => {
+    const ComponetContent = modalsMap[openedModalMap];
     if (!ComponetContent) {
       return null;
     }
-    return <ComponetContent handleClose={handleClose} />;
+    return <ComponetContent handleClose={handleCloseRender} />;
   };
 
   return (

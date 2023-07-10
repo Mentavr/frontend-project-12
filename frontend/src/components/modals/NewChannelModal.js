@@ -13,9 +13,7 @@ import { selectChannelNames } from '../../slice/channelsSlice';
 const ModalChannel = ({ handleClose }) => {
   const { newChannelEmit } = useContext(SocketContext);
   const { t } = useTranslation();
-  console.log('select', selectChannelNames)
   const namesChannels = useSelector(selectChannelNames);
-  console.log(namesChannels)
 
   const SignupSchema = Yup.object({
     newChannel: Yup.string()

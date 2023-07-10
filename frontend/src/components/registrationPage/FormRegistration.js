@@ -46,6 +46,7 @@ const FormRegistration = () => {
     validationSchema: SignupSchema,
     onSubmit: async () => {
       try {
+        const { values } = formik;
         await autContext.logIn(values, createUserPathApi);
         return navigate(chatPath());
       } catch {
