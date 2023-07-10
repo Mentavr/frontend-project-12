@@ -30,11 +30,7 @@ const Chat = () => {
   const { currentChannelId } = useSelector((state) => state.channels);
   const currentChanelId = channelIds.find((id) => id === currentChannelId);
   const currentNameChannel = currentChanelId ? channelEntities[currentChanelId].name : 'general';
-  const filterMesseges = messagesState.filter((messageState) => {
-    if (messageState.channelId === currentChannelId) {
-      return messageState;
-    }
-  });
+  const filterMesseges = messagesState.filter((message) => message.channelId === currentChannelId);
 
   useEffect(() => {
     dispatch(userData());

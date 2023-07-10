@@ -1,11 +1,11 @@
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 import NewChannelModal from './NewChannelModal';
 import RenameChannelModal from './RenameChannelModal';
 import RemoveModalChannel from './RemoveChannelModal';
-import { openModal, closeModal } from '../../slice/modalSwitch';
+import { closeModal } from '../../slice/modalSwitch';
 
 const modalsMap = {
   newChannelModal: NewChannelModal,
@@ -33,7 +33,7 @@ const ModalOpen = () => {
     }
     return <ComponetContent handleClose={handleClose} />;
   };
-  console.log('openedModal', openedModal);
+
   return (
     <Modal
       show={isShow}
