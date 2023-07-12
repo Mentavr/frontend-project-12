@@ -32,7 +32,7 @@ const ModalChannel = ({ handleClose }) => {
       const filterMessege = filter.clean(newChannel);
       newChannelEmit(filterMessege);
       handleClose();
-      formik.values.newChannel = '';
+      formik.resetForm();
     },
   });
   const {
@@ -41,7 +41,7 @@ const ModalChannel = ({ handleClose }) => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Form.Group as={Col} htmlFor="validationFormikNewChannel">
+      <Form.Group as={Col}>
         <Form.Label className="visually-hidden" htmlFor="newChannel">
           {t('text.nameChanel')}
         </Form.Label>

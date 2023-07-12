@@ -37,8 +37,7 @@ const Login = () => {
     onSubmit: async () => {
       const request = await autContext.logIn(formik.values, loginPathApi);
       if (request) {
-        const { errors } = formik;
-        errors.password = 'errors.enterNickPassword';
+        formik.setErrors({password: 'errors.enterNickPassword'});
         return;
       }
       navigate(chatPath());
@@ -88,7 +87,6 @@ const Login = () => {
                             onBlur={handleBlur}
                             autoComplete="username"
                             isInvalid={touched.username && errors.username}
-                            required
                           />
                           <label htmlFor="username">{t('text.userName')}</label>
                           <Form.Control.Feedback type="invalid" tooltip>
@@ -108,7 +106,6 @@ const Login = () => {
                             onBlur={handleBlur}
                             autoComplete="current-password"
                             isInvalid={touched.password && errors.password}
-                            required
                           />
                           <label htmlFor="password">{t('text.password')}</label>
                           <Form.Control.Feedback type="invalid" tooltip>

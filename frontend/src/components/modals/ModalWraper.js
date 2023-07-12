@@ -6,6 +6,7 @@ import NewChannelModal from './NewChannelModal';
 import RenameChannelModal from './RenameChannelModal';
 import RemoveModalChannel from './RemoveChannelModal';
 import { closeModal } from '../../slice/modalSwitch';
+import { openedModalSlice } from '../../slice/modalSwitch';
 
 const modalsMap = {
   newChannelModal: NewChannelModal,
@@ -22,7 +23,7 @@ const titleMap = {
 const ModalOpen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { openedModal } = useSelector((state) => state.modal);
+  const openedModal = useSelector(openedModalSlice);
   const isShow = Boolean(openedModal);
   const handleClose = () => dispatch(closeModal());
 
@@ -41,7 +42,7 @@ const ModalOpen = () => {
       backdrop="static"
       keyboard
       centered
-      restoreFocus="true"
+      restoreFocus
     >
       <Modal.Header closeButton>
         <Modal.Title>{t(titleMap[openedModal]) ?? ''}</Modal.Title>
@@ -53,5 +54,4 @@ const ModalOpen = () => {
   );
 };
 
-export const { handlerOpen } = ModalOpen;
 export default ModalOpen;

@@ -27,4 +27,5 @@ const userSlice = createSlice({
     .addCase(userData.rejected, (state, action) => ({ ...state, loadingStatus: 'failed', error: action.error })),
 });
 
+export const loadingStatusSelector = (state) => state.apiData.loadingStatus;
 export default userSlice.reducer;

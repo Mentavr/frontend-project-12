@@ -45,14 +45,13 @@ const FormRegistration = () => {
     },
     validationSchema: SignupSchema,
     onSubmit: async () => {
-      try {
-        const { values } = formik;
-        await autContext.logIn(values, createUserPathApi);
-        return navigate(chatPath());
-      } catch {
-        formik.errors.confirmPassword = 'errors.existUser';
-        return autContext.logOut();
+      const { values } = formik;
+      const request = await autContext.logIn(values, createUserPathApi);
+      if (request) {
+        formik.setErrors({ confirmPassword: 'errors.existUser' });
+        return;
       }
+      navigate(chatPath());
     },
   });
   const {
@@ -91,7 +90,6 @@ const FormRegistration = () => {
                         onBlur={handleBlur}
                         autoComplete="username"
                         isInvalid={touched.username && errors.username}
-                        required
                       />
                       <label htmlFor="username">
                         {t('text.userNameRegistration')}
@@ -114,7 +112,6 @@ const FormRegistration = () => {
                         onBlur={handleBlur}
                         autoComplete="current-password"
                         isInvalid={touched.password && errors.password}
-                        required
                       />
                       <label htmlFor="password">{t('text.password')}</label>
                       <Form.Control.Feedback type="invalid" tooltip>
@@ -136,7 +133,6 @@ const FormRegistration = () => {
                         isInvalid={
                           touched.confirmPassword && errors.confirmPassword
                         }
-                        required
                       />
                       <label htmlFor="confirmPassword">
                         {t('text.confirmPassword')}

@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 import useAutoFocus from '../../hooks/useAutoFocus';
 import { closeModal } from '../../slice/modalSwitch';
 import SocketContext from '../../context/socketContext';
+import { selectChannelNames } from '../../slice/channelsSlice';
 
 const RenameChannel = () => {
   const { idChannel } = useSelector((state) => state.modal);
@@ -17,11 +18,7 @@ const RenameChannel = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const handleClose = () => dispatch(closeModal());
-  const namesChannels = useSelector((state) => state.channels.ids
-    .map((id) => {
-      const channel = state.channels.entities[id];
-      return channel.name;
-    }));
+  const namesChannels = useSelector(selectChannelNames);
 
   const SignupSchema = Yup.object({
     renameChannel: Yup.string()
@@ -39,6 +36,7 @@ const RenameChannel = () => {
     onSubmit: (value) => {
       renameChannelEmit(idChannel, value.renameChannel);
       handleClose();
+      formik.resetForm();
     },
   });
 

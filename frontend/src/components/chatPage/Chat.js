@@ -6,7 +6,8 @@ import Button from 'react-bootstrap/Button';
 import filter from 'leo-profanity';
 import { toast } from 'react-toastify';
 import { openModal } from '../../slice/modalSwitch';
-import { setChannel, selectorChannels } from '../../slice/channelsSlice';
+import { setChannel, selectorChannels, currentChannelIdSelector } from '../../slice/channelsSlice';
+import { loadingStatusSelector } from '../../slice/apiDataSlice';
 import { selectorMessages } from '../../slice/messagesSlice';
 import DropdownMenu from './DropdownMenu';
 import SocketContext from '../../context/socketContext';
@@ -18,7 +19,7 @@ import LoadingPage from './loadingPage';
 
 const Chat = () => {
   const dispatch = useDispatch();
-  const { loadingStatus } = useSelector((state) => state.apiData);
+  const loadingStatus = useSelector(loadingStatusSelector);
   const { chatPath } = routes;
   const autContext = useAuth();
   const { addMessageEmit } = useContext(SocketContext);
@@ -27,7 +28,7 @@ const Chat = () => {
   const messagesState = useSelector(selectorMessages.selectAll);
   const channelEntities = useSelector(selectorChannels.selectEntities);
   const channelIds = useSelector(selectorChannels.selectIds);
-  const { currentChannelId } = useSelector((state) => state.channels);
+  const currentChannelId = useSelector(currentChannelIdSelector);
   const currentChanelId = channelIds.find((id) => id === currentChannelId);
   const currentNameChannel = currentChanelId ? channelEntities[currentChanelId].name : 'general';
   const filterMesseges = messagesState.filter((message) => message.channelId === currentChannelId);
