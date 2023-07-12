@@ -39,5 +39,5 @@ export const selectChannelNames = (state) => state.channels.ids
     const channel = state.channels.entities[id];
     return channel.name;
   });
-export const currentChannelIdSelector = (state) => state.channels.currentChannelId  
+export const currentChannelIdSelector = (state) => state.channels.currentChannelId;
 export default channelsSlice.reducer;

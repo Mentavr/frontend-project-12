@@ -37,7 +37,7 @@ const Login = () => {
     onSubmit: async () => {
       const request = await autContext.logIn(formik.values, loginPathApi);
       if (request) {
-        formik.setErrors({password: 'errors.enterNickPassword'});
+        formik.setErrors({ password: 'errors.enterNickPassword' });
         return;
       }
       navigate(chatPath());

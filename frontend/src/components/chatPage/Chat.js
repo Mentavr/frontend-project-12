@@ -7,14 +7,13 @@ import filter from 'leo-profanity';
 import { toast } from 'react-toastify';
 import { openModal } from '../../slice/modalSwitch';
 import { setChannel, selectorChannels, currentChannelIdSelector } from '../../slice/channelsSlice';
-import { loadingStatusSelector } from '../../slice/apiDataSlice';
+import { loadingStatusSelector, userData } from '../../slice/apiDataSlice';
 import { selectorMessages } from '../../slice/messagesSlice';
 import DropdownMenu from './DropdownMenu';
 import SocketContext from '../../context/socketContext';
 import useAuth from '../../hooks/useAuth';
 import routes from '../../routesSpi';
 import Messages from './Messages';
-import { userData } from '../../slice/apiDataSlice';
 import LoadingPage from './loadingPage';
 
 const Chat = () => {

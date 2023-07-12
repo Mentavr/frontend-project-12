@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import NewChannelModal from './NewChannelModal';
 import RenameChannelModal from './RenameChannelModal';
 import RemoveModalChannel from './RemoveChannelModal';
-import { closeModal } from '../../slice/modalSwitch';
-import { openedModalSlice } from '../../slice/modalSwitch';
+import { closeModal, openedModalSlice } from '../../slice/modalSwitch';
 
 const modalsMap = {
   newChannelModal: NewChannelModal,
