@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { io } from 'socket.io-client';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -58,11 +58,11 @@ const ApiProvider = ({ children }) => {
     channelId: currentChannelId,
     username: userName,
   });
+  const value = useMemo(() => ({
+    newChannelEmit, removeChannelEmit, renameChannelEmit, addMessageEmit,
+  }), []);
   return (
-    <SocketContext.Provider value={{
-      newChannelEmit, removeChannelEmit, renameChannelEmit, addMessageEmit,
-    }}
-    >
+    <SocketContext.Provider value={value}>
       {children}
     </SocketContext.Provider>
   );
