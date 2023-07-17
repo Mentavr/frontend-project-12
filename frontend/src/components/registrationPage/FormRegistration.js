@@ -45,13 +45,13 @@ const FormRegistration = () => {
     },
     validationSchema: SignupSchema,
     onSubmit: async () => {
-      const { values } = formik;
-      const request = await autContext.logIn(values, createUserPathApi);
-      if (request) {
+      try {
+        const { values } = formik;
+        await autContext.logIn(values, createUserPathApi);
+        navigate(chatPath());
+      } catch (_) {
         formik.setErrors({ confirmPassword: 'errors.existUser' });
-        return;
       }
-      navigate(chatPath());
     },
   });
   const {

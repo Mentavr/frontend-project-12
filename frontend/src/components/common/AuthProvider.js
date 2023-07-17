@@ -5,17 +5,13 @@ import AuthContext from '../../context/loggerContext.js';
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(null);
   const logIn = async (values, path) => {
-    try {
-      const login = await axios.post(path, values);
-      localStorage.setItem('userId', JSON.stringify(login.data));
-      return setLoggedIn(true);
-    } catch ({ request }) {
-      return request;
-    }
+    const login = await axios.post(path, values);
+    localStorage.setItem('userId', JSON.stringify(login.data));
+    setLoggedIn(true);
   };
   const logOut = () => {
     localStorage.removeItem('userId');
-    return setLoggedIn(null);
+    setLoggedIn(null);
   };
 
   return (

@@ -35,12 +35,12 @@ const Login = () => {
     },
     validationSchema: SignupSchema,
     onSubmit: async () => {
-      const request = await autContext.logIn(formik.values, loginPathApi);
-      if (request) {
+      try {
+        await autContext.logIn(formik.values, loginPathApi);
+        navigate(chatPath());
+      } catch (_) {
         formik.setErrors({ password: 'errors.enterNickPassword' });
-        return;
       }
-      navigate(chatPath());
     },
   });
 
