@@ -13,7 +13,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('userId');
     setLoggedIn(null);
   };
-  const value = useMemo(() => ({ loggedIn, logIn, logOut }), []);
+  const value = useMemo(() => ({ loggedIn, logIn, logOut }), [loggedIn]);
   return (
     <AuthContext.Provider value={value}>
       {children}
